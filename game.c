@@ -54,39 +54,33 @@ void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientati
     tinygl_clear();
 
     if (orientation == HORIZONTAL) {
-        // Calculate the start and end points of the ship
-        int start_col = col - length / 2;
-        int end_col = col + length / 2;
+        // Calculate the end point of the ship
+        int end_col = col + length - 1;
 
         // Ensure the ship stays within the display bounds
-        if (start_col < 0) {
-            start_col = 0;
-            end_col = length - 1;
-        }
         if (end_col >= COLUMNS) {
             end_col = COLUMNS - 1;
-            start_col = end_col - length + 1;
+            col = end_col - length + 1;
         }
 
         // Draw the ship horizontally
-        tinygl_draw_line(tinygl_point(start_col, row), tinygl_point(end_col, row), 1);
+        for (int i = 0; i < length; i++) {
+            tinygl_draw_point(tinygl_point(col + i, row), 1);
+        }
     } else {
-        // Calculate the start and end points of the ship
-        int start_row = row - length / 2;
-        int end_row = row + length / 2;
+        // Calculate the end point of the ship
+        int end_row = row + length - 1;
 
         // Ensure the ship stays within the display bounds
-        if (start_row < 0) {
-            start_row = 0;
-            end_row = length - 1;
-        }
         if (end_row >= ROWS) {
             end_row = ROWS - 1;
-            start_row = end_row - length + 1;
+            row = end_row - length + 1;
         }
 
         // Draw the ship vertically
-        tinygl_draw_line(tinygl_point(col, start_row), tinygl_point(col, end_row), 1);
+        for (int i = 0; i < length; i++) {
+            tinygl_draw_point(tinygl_point(col, row + i), 1);
+        }
     }
 
     // Update the display to reflect the changes

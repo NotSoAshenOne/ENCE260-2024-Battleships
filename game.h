@@ -1,4 +1,3 @@
-// game.h
 #ifndef GAME_H
 #define GAME_H
 
@@ -6,13 +5,29 @@
 
 #define ROWS 7
 #define COLUMNS 5
+#define MAX_SHIPS 10
+#define MAX_SHIP_LENGTH 7
 
 typedef enum {
     HORIZONTAL,
     VERTICAL
 } orientation_t;
 
-extern uint8_t ship_positions[ROWS][COLUMNS];
+typedef struct {
+    uint8_t row;
+    uint8_t col;
+} ship_part_t;
+
+typedef struct {
+    uint8_t row;
+    uint8_t col;
+    uint8_t length;
+    orientation_t orientation;
+    ship_part_t parts[MAX_SHIP_LENGTH];
+} ship_t;
+
+extern ship_t ships[MAX_SHIPS];
+extern uint8_t ship_count;
 
 void game_loop(void);
 void setup_phase(void);
