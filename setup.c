@@ -1,28 +1,61 @@
 #include "pio.h"
 #include "tinygl.h"
 #include "pacer.h"
+#include "navswitch.h"
 #include "game.h"
 
 ship_t ships[MAX_SHIPS];
 uint8_t ship_count = 0;
 
+void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation);
+void update_ship(ship_t *ship, uint8_t row, uint8_t col);
+void rotate_ship(ship_t *ship);
+
 void setup_phase(void)
 {
-    // Add Ships to the game, The first parameter is the row, the second is the column, the third is the length of the ship, and the fourth is the orientation of the ship
-    add_ship(3, 1, 3, VERTICAL);
-    add_ship(1, 1, 2, HORIZONTAL);
-    add_ship(5, 2, 4, VERTICAL);
-    navswitch_init();
     tinygl_init(1000);
-    tinygl_clear();
+    navswitch_init();
+    pacer_init(1000);
 
+    add_ship(3, 1, 3, VERTICAL);
+
+    tinygl_clear();
     for (uint8_t i = 0; i < ship_count; i++) {
         ship_t ship = ships[i];
         draw_ship(ship.row, ship.col, ship.length, ship.orientation);
     }
+    tinygl_update();
 
     tinygl_update();
-    navswitch_update ();
+    navswitch_update();
+    if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
+        tinygl_clear();
+        rotate_ship(&ships[ship_count - 1]);
+    }
+}
+
+void update_ship(ship_t *ship, uint8_t row, uint8_t col) {
+    ship->row = row;
+    ship->col = col;
+
+    if (ship->orientation == HORIZONTAL) {
+        for (int i = 0; i < ship->length; i++) {
+            ship->parts[i] = (ship_part_t){row, col + i};
+        }
+    } else {
+        for (int i = 0; i < ship->length; i++) {
+            ship->parts[i] = (ship_part_t){row + i, col};
+        }
+    }
+}
+
+void rotate_ship(ship_t *ship) {
+    if (ship->orientation == HORIZONTAL) {
+        ship->orientation = VERTICAL;
+    } else {
+        ship->orientation = HORIZONTAL;
+    }
+    update_ship(ship, ship->row, ship->col);
 }
 
 void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation) {
@@ -36,7 +69,7 @@ void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientatio
         return;
     }
 
-    ship_t ship = {row, col, length, orientation};
+    ship_t ship = {row, col, length, orientation, {{0, 0}}};
 
     if (orientation == HORIZONTAL) {
         int end_col = col + length - 1;
