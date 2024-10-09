@@ -1,14 +1,40 @@
-#include "system.h"
+#include "game.h"
+#include "setup.h"
+#include "attack.h"
+#include "defend.h"
+#include "winlose.h"
 
-int main (void)
+typedef enum {
+    SETUP,
+    ATTACK,
+    DEFEND,
+    WINLOSE
+} GameState;
+
+void game_loop(void)
 {
-    system_init ();
-
+    GameState state = SETUP;
 
     while (1)
     {
-
-
-
+        switch (state)
+        {
+            case SETUP:
+                setup_phase();
+                state = ATTACK; // Transition to next state
+                break;
+            case ATTACK:
+                attack_phase();
+                state = DEFEND; // Transition to next state
+                break;
+            case DEFEND:
+                defend_phase();
+                state = WINLOSE; // Transition to next state
+                break;
+            case WINLOSE:
+                winlose_phase();
+                state = SETUP; // Restart or end game
+                break;
+        }
     }
 }
