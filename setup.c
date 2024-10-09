@@ -8,8 +8,11 @@ uint8_t ship_count = 0;
 
 void setup_phase(void)
 {
+    // Add Ships to the game, The first parameter is the row, the second is the column, the third is the length of the ship, and the fourth is the orientation of the ship
     add_ship(3, 1, 3, VERTICAL);
-
+    add_ship(1, 1, 2, HORIZONTAL);
+    add_ship(5, 2, 4, VERTICAL);
+    navswitch_init();
     tinygl_init(1000);
     tinygl_clear();
 
@@ -19,6 +22,7 @@ void setup_phase(void)
     }
 
     tinygl_update();
+    navswitch_update ();
 }
 
 void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation) {
