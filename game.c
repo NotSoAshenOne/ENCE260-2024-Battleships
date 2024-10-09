@@ -4,6 +4,8 @@
 #include "defend.h"
 #include "winlose.h"
 
+uint8_t ship_positions[ROWS][COLUMNS] = {0};
+
 typedef enum {
     SETUP,
     ATTACK,
