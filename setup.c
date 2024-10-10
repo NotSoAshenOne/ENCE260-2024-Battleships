@@ -59,18 +59,21 @@ void rotate_ship(ship_t *ship) {
 }
 
 void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation) {
+    // Don't need to have a handle for this. Can just specify the number of ships a player can have and then add them in a for loop.
     if (ship_count >= MAX_SHIPS) {
         // Handle error: too many ships
+
         return;
     }
-
+    // Same as the other one, we probs don't need this if we specify the lengths when allowing the player to draw up the ships.
     if (length < 1 || length > MAX_SHIP_LENGTH) {
         // Handle error: invalid ship length
         return;
     }
 
     ship_t ship = {row, col, length, orientation, {{0, 0}}};
-
+    // Could probably simplify by specifying the orientation they appear in as default and then the player can change.
+    // Same as draw ship??
     if (orientation == HORIZONTAL) {
         int end_col = col + length - 1;
 
@@ -94,6 +97,6 @@ void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientatio
             ship.parts[i] = (ship_part_t){row + i, col};
         }
     }
-
+    
     ships[ship_count++] = ship;
 }

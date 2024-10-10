@@ -22,7 +22,7 @@ orientation_t ship_orientation = HORIZONTAL;
 void game_loop(void)
 {
     GameState state = SETUP;
-
+    
     while (1)
     {
         switch (state)
@@ -41,7 +41,8 @@ void game_loop(void)
                 break;
             case WINLOSE:
                 winlose_phase();
-                state = SETUP; // Restart or end game
+                //state = SETUP; // Restart or end game
+                state = ATTACK; // <- Don't need to setup again, just need to remember the ship positions and states.
                 break;
         }
     }
