@@ -4,7 +4,8 @@
 #include <stdint.h>
 #include "tinygl.h"
 
-tinygl_point_t navigation(void);
+// tinygl_point_t navigation(void);
+void navigation(tinygl_point_t* selectPosition, bool* isSelected);
 void setup_phase(void);
 
 #endif // GAME_H
