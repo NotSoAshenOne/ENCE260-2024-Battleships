@@ -2,6 +2,7 @@
 #include "tinygl.h"
 #include "pacer.h"
 #include "navswitch.h"
+#include "ship.h"
 #include "game.h"
 
 ship_t ships[MAX_SHIPS];
