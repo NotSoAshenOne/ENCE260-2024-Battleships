@@ -9,13 +9,13 @@ DEL = rm
 all: game.out
 
 # Compile: create object files from C source files.
-main.o: main.c
+main.o: main.c game.h ../../drivers/avr/system.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-game.o: game.c game.h
+game.o: game.c game.h setup.h attack.h defend.h winlose.h ../../drivers/avr/system.h ../../drivers/avr/pio.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/navswitch.h ../../utils/font.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-setup.o: setup.c setup.h
+setup.o: setup.c setup.h game.h ../../drivers/avr/pio.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/navswitch.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 attack.o: attack.c attack.h

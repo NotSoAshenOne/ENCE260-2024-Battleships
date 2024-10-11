@@ -3,7 +3,8 @@
 
 int main(void)
 {
-    system_init();
-    game_loop();
+    //system_init();
+    //game_loop();
+    navigation();
     return 0;
 }

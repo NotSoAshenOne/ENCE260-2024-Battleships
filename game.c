@@ -7,6 +7,8 @@
 #include "pio.h"
 #include "tinygl.h"
 #include "pacer.h"
+#include "navswitch.h"
+#include "../fonts/font5x7_1.h"
 
 uint8_t ship_positions[ROWS][COLUMNS] = {0};
 
@@ -86,4 +88,62 @@ void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientati
 
     // Update the display to reflect the changes
     tinygl_update();
+}
+
+void navigation(void) 
+{
+    system_init ();
+    tinygl_init (1000);
+    tinygl_point_t selectPosition = tinygl_point(2,3);
+    tinygl_draw_point(selectPosition, 1);
+
+    pacer_init(1000);
+    bool isSelected = false;
+    while (!isSelected) {
+
+        pacer_wait ();
+        tinygl_update ();
+
+        /* TODO: Call the navswitch update function.  */
+        navswitch_update ();
+        /* TODO: Increment character if NORTH is pressed.  */
+        if (navswitch_push_event_p (0)) {
+            tinygl_draw_point(selectPosition, 0);
+            if (selectPosition.y == 0) {
+                selectPosition.y = 6;
+            } else {
+                selectPosition.y--;
+
+            }
+        }
+        /* TODO: Decrement character if SOUTH is pressed.  */
+        else if (navswitch_push_event_p (2)) {
+            tinygl_draw_point(selectPosition, 0);
+            if (selectPosition.y == 6) {
+                selectPosition.y = 0;
+            } else {
+                selectPosition.y++;
+
+            }
+        }
+        else if (navswitch_push_event_p (1)) {
+            tinygl_draw_point(selectPosition, 0);
+            if (selectPosition.x == 4) {
+                selectPosition.x = 0;
+            } else {
+                selectPosition.x++;
+
+            }
+        }
+        else if (navswitch_push_event_p (3)) {
+            tinygl_draw_point(selectPosition, 0);
+            if (selectPosition.x == 0) {
+                selectPosition.x = 4;
+            } else {
+            selectPosition.x--;
+            }
+        }
+        tinygl_draw_point(selectPosition, 1);
+
+    }
 }

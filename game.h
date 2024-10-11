@@ -29,6 +29,7 @@ typedef struct {
 extern ship_t ships[MAX_SHIPS];
 extern uint8_t ship_count;
 
+void navigation(void);
 void game_loop(void);
 void setup_phase(void);
 void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation);
