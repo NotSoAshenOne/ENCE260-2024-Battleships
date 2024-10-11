@@ -47,7 +47,7 @@ void game_loop(void)
     }
 }
 
-void navigation(void) 
+tinygl_point_t navigation(void) 
 {
     system_init ();
     tinygl_init (1000);
@@ -100,7 +100,10 @@ void navigation(void)
             selectPosition.x--;
             }
         }
+        else if (navswitch_push_event_p (4)) {
+            isSelected = true;
+        }
         tinygl_draw_point(selectPosition, 1);
-
     }
+    return selectPosition;
 }
