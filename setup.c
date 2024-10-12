@@ -86,7 +86,7 @@ void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientatio
         }
 
         for (int i = 0; i < length; i++) {
-            parts[shipNum+i] = (ship_part_t){row, col + i};
+            parts[shipNum+i] = (ship_part_t){row, col + i, false};
         }
     } else {
         int end_row = row + length - 1;
@@ -97,7 +97,7 @@ void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientatio
         }
 
         for (int i = 0; i < length; i++) {
-            parts[shipNum+i] = (ship_part_t){row + i, col};
+            parts[shipNum+i] = (ship_part_t){row + i, col, false};
         }
     }
     

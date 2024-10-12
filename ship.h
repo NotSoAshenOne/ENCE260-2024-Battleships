@@ -2,6 +2,7 @@
 #define SHIP_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define ROWS 7
 #define COLUMNS 5
@@ -16,6 +17,7 @@ typedef enum {
 typedef struct {
     uint8_t row;
     uint8_t col;
+    bool hit;
 } ship_part_t;
 
 typedef struct {
