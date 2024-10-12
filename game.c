@@ -96,35 +96,68 @@ void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t le
         button_update ();
         /* TODO: Increment character if NORTH is pressed.  */
         if (navswitch_push_event_p (0)) {
-            if (selectPosition->y == 0) {
-                selectPosition->y = 6;
+            if (*orientation == VERTICAL) {
+                if (selectPosition->y == 0) {
+                    selectPosition->y = (6-length+1);
+                } else {
+                    selectPosition->y += -1;
+                }
             } else {
-                selectPosition->y += -1;
+                if (selectPosition->y == 0) {
+                    selectPosition->y = 6;
+                } else {
+                    selectPosition->y += -1;
+                }
             }
         }
         /* TODO: Decrement character if SOUTH is pressed.  */
         else if (navswitch_push_event_p (2)) {
             //if ((selectPosition->y == (6-length) && (*orientation == VERTICAL))||(selectPosition->y == 6 && (*orientation == HORIZONTAL)))  {
-            if (selectPosition->y == 6) {
-                selectPosition->y = 0;
+            if (*orientation == VERTICAL) {
+                if (selectPosition->y == (6-length+1)) {
+                    selectPosition->y = 0;
+                } else {
+                    selectPosition->y += 1;
+                }
             } else {
-                selectPosition->y += 1;
+                if (selectPosition->y == 6) {
+                    selectPosition->y = 0;
+                } else {
+                    selectPosition->y += 1;
+                }
             }
         }
         else if (navswitch_push_event_p (1)) {
             //if ((selectPosition->x == 4 && (*orientation == VERTICAL)) || (selectPosition->x == (4-length) && (*orientation == HORIZONTAL))) {
-            if (selectPosition->x == 4) {
-                selectPosition->x = 0;
+            if (*orientation == HORIZONTAL) {
+                if (selectPosition->x == (4-length+1)) {
+                    selectPosition->x = 0;
+                } else {
+                    selectPosition->x += 1;
+                }
             } else {
+                if (selectPosition->x == 4) {
+                selectPosition->x = 0;
+                } else {
                 selectPosition->x += 1;
+                }
             }
         }
         else if (navswitch_push_event_p (3)) {
-            if (selectPosition->x == 0) {
-                selectPosition->x = 4;
+            if (*orientation == HORIZONTAL) {
+                if (selectPosition->x == 0) {
+                    selectPosition->x = (4-length+1);
+                } else {
+                    selectPosition->x += -1;
+                }
             } else {
-            selectPosition->x += -1;
+                if (selectPosition->x == 0) {
+                selectPosition->x = 4;
+                } else {
+                selectPosition->x += -1;
+                }
             }
+            
         }
         else if (navswitch_push_event_p (4)) {
             if ((*orientation) == HORIZONTAL) {

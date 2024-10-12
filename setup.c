@@ -107,6 +107,7 @@ void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientatio
 void placeShips() 
 {
     bool* isSelected;
+    (*isSelected) = false;
     orientation_t* ship_orientation;
     *ship_orientation = HORIZONTAL;
     system_init ();
