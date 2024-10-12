@@ -49,51 +49,33 @@ void game_loop(void)
 
 void navigation(tinygl_point_t* selectPosition, bool* isSelected) 
 {
-    // system_init ();
-    // tinygl_init (1000);
-    // tinygl_point_t selectPosition = tinygl_point(2,3);
-    // tinygl_draw_point(selectPosition, 1);
-
-    // pacer_init(1000);
-    // //bool isSelected = false;
-    // while (!(*isSelected)) {
-
-        // pacer_wait ();
-        // tinygl_update ();
-
         /* TODO: Call the navswitch update function.  */
+        tinygl_draw_point((*selectPosition), 0);
         navswitch_update ();
         /* TODO: Increment character if NORTH is pressed.  */
         if (navswitch_push_event_p (0)) {
-            tinygl_draw_point((*selectPosition), 0);
             if (selectPosition->y == 0) {
                 selectPosition->y = 6;
             } else {
                 selectPosition->y += -1;
-
             }
         }
         /* TODO: Decrement character if SOUTH is pressed.  */
         else if (navswitch_push_event_p (2)) {
-            tinygl_draw_point((*selectPosition), 0);
             if (selectPosition->y == 6) {
                 selectPosition->y = 0;
             } else {
                 selectPosition->y += 1;
-
             }
         }
         else if (navswitch_push_event_p (1)) {
-            tinygl_draw_point((*selectPosition), 0);
             if (selectPosition->x == 4) {
                 selectPosition->x = 0;
             } else {
                 selectPosition->x += 1;
-
             }
         }
         else if (navswitch_push_event_p (3)) {
-            tinygl_draw_point((*selectPosition), 0);
             if (selectPosition->x == 0) {
                 selectPosition->x = 4;
             } else {
@@ -104,6 +86,45 @@ void navigation(tinygl_point_t* selectPosition, bool* isSelected)
             (*isSelected) = true;
         }
         tinygl_draw_point((*selectPosition), 1);
-    // }
-    // return selectPosition;
+}
+
+void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t length, orientation_t orientation) 
+{
+        /* TODO: Call the navswitch update function.  */
+        tinygl_clear ();
+        navswitch_update ();
+        /* TODO: Increment character if NORTH is pressed.  */
+        if (navswitch_push_event_p (0)) {
+            if (selectPosition->y == 0) {
+                selectPosition->y = 6;
+            } else {
+                selectPosition->y += -1;
+            }
+        }
+        /* TODO: Decrement character if SOUTH is pressed.  */
+        else if (navswitch_push_event_p (2)) {
+            if (selectPosition->y == 6) {
+                selectPosition->y = 0;
+            } else {
+                selectPosition->y += 1;
+            }
+        }
+        else if (navswitch_push_event_p (1)) {
+            if (selectPosition->x == 4) {
+                selectPosition->x = 0;
+            } else {
+                selectPosition->x += 1;
+            }
+        }
+        else if (navswitch_push_event_p (3)) {
+            if (selectPosition->x == 0) {
+                selectPosition->x = 4;
+            } else {
+            selectPosition->x += -1;
+            }
+        }
+        else if (navswitch_push_event_p (4)) {
+            (*isSelected) = true;
+        }
+        draw_ship((selectPosition->y),(selectPosition->x), length, orientation);
 }

@@ -38,7 +38,7 @@ int main(void)
         pacer_wait ();
         tinygl_update ();
         if (!(*isSelected)) {
-            navigation(&startPosition, isSelected);
+            shipNavigation(&startPosition, isSelected, 2, ship_orientation);
         } else {
             draw_ship((startPosition.y), (startPosition.x), 2, ship_orientation);
         }
