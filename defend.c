@@ -15,9 +15,6 @@ void decode_coordinate(uint8_t* x, uint8_t* y, char encoded_char) {
 
 void defend_phase(void)
 {
-    ir_uart_init();
-    pacer_init(300);
-    tinygl_init(1000);
     tinygl_clear();
 
     if (ir_uart_read_ready_p())
@@ -25,9 +22,22 @@ void defend_phase(void)
         led_init();
         data = ir_uart_getc();
         decode_coordinate(&x, &y, data);
+        check_hit(x, y);
     }
     tinygl_point_t point = tinygl_point(x, y);
     // Use point variable to avoid unused variable warning
     tinygl_draw_point(point, 1);
     tinygl_update();
+    led_set(LED1, 0);
+}
+
+void check_hit(uint8_t x, uint8_t y) {
+    int hit = 0;
+    if (hit = 1) {
+        ir_uart_putc('+');
+        led_set(LED1, 1);
+    } else {
+        ir_uart_putc('-');
+    }
+
 }

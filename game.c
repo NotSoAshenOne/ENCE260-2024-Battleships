@@ -11,6 +11,7 @@
 #include "navswitch.h"
 #include "button.h"
 
+
 typedef enum {
     SETUP,
     ATTACK,
@@ -20,29 +21,25 @@ typedef enum {
 
 void game_loop(void)
 {
-    GameState state = SETUP;
+    GameState state = ATTACK;
     
     while (1)
     {
-        switch (state)
+        if (state == SETUP)
         {
-            case SETUP:
-                setup_phase();
-                state = ATTACK; // Transition to next state
-                break;
-            case ATTACK:
-                attack_phase();
-                state = DEFEND; // Transition to next state
-                break;
-            case DEFEND:
-                defend_phase();
-                state = WINLOSE; // Transition to next state
-                break;
-            case WINLOSE:
-                winlose_phase();
-                //state = SETUP; // Restart or end game
-                state = ATTACK; // <- Don't need to setup again, just need to remember the ship positions and states.
-                break;
+            setup_phase();
+        }
+        else if (state == ATTACK)
+        {
+            attack_phase();
+        }
+        else if (state == DEFEND)
+        {
+            defend_phase();
+        }
+        else if (state == WINLOSE)
+        {
+            winlose_phase();
         }
     }
 }

@@ -1,6 +1,12 @@
 #ifndef GAME_H
 #define GAME_H
 
+#define START '*';
+#define HIT '+';
+#define MISS '-';
+
+#define remainingShips 5
+
 #include <stdint.h>
 #include "tinygl.h"
 #include "ship.h"
