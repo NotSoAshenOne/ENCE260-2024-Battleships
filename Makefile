@@ -12,7 +12,7 @@ all: game.out
 main.o: main.c game.h ship.h ../../drivers/avr/system.h ../../utils/pacer.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-game.o: game.c setup.h attack.h defend.h winlose.h ../../drivers/avr/system.h ../../drivers/avr/pio.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/navswitch.h ../../utils/font.h
+game.o: game.c setup.h attack.h defend.h winlose.h ../../drivers/avr/system.h ../../drivers/avr/pio.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/navswitch.h  ../../drivers/button.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 ship.o: ship.c game.h setup.h attack.h defend.h winlose.h ../../drivers/avr/system.h ../../drivers/avr/pio.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/navswitch.h ../../utils/font.h
@@ -51,6 +51,9 @@ ledmat.o: ../../drivers/ledmat.c ../../drivers/avr/pio.h ../../drivers/avr/syste
 navswitch.o: ../../drivers/navswitch.c ../../drivers/avr/delay.h ../../drivers/avr/pio.h ../../drivers/avr/system.h ../../drivers/navswitch.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
+button.o: ../../drivers/button.c ../../drivers/button.h ../../drivers/avr/pio.h ../../drivers/avr/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
 font.o: ../../utils/font.c ../../drivers/avr/system.h ../../utils/font.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
@@ -77,7 +80,7 @@ usart1.o: ../../drivers/avr/usart1.c ../../drivers/avr/system.h ../../drivers/av
 
 
 # Link: create ELF output file from object files.
-game.out: main.o game.o ship.o setup.o attack.o defend.o winlose.o pio.o system.o led.o timer.o display.o ledmat.o navswitch.o font.o pacer.o tinygl.o ir_uart.o prescale.o usart1.o timer0.o timer.o
+game.out: main.o game.o ship.o setup.o attack.o defend.o winlose.o pio.o system.o led.o timer.o display.o ledmat.o navswitch.o font.o pacer.o tinygl.o ir_uart.o prescale.o usart1.o timer0.o timer.o button.o
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(SIZE) $@
 

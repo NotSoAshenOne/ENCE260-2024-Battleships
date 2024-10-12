@@ -4,6 +4,7 @@
 #include "navswitch.h"
 #include "ship.h"
 #include "game.h"
+#include <stdbool.h>
 
 ship_t ships[MAX_SHIPS];
 uint8_t ship_count = 0;
@@ -100,4 +101,27 @@ void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientatio
     }
     
     ships[ship_count++] = ship;
+
+}
+
+void placeShips() 
+{
+    bool* isSelected;
+    orientation_t* ship_orientation;
+    *ship_orientation = HORIZONTAL;
+    system_init ();
+    tinygl_init (1000);
+    tinygl_point_t startPosition = tinygl_point(2,3);
+    tinygl_draw_point((startPosition), 1);
+    pacer_init(1000);
+    while (1) {
+        pacer_wait ();
+        tinygl_update ();
+        if (!(*isSelected)) {
+            shipNavigation(&startPosition, isSelected, 2, &ship_orientation);
+        } else {
+            draw_ship((startPosition.y), (startPosition.x), 2, *ship_orientation);
+        }
+        
+    }
 }

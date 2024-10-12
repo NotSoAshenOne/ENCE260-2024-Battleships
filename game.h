@@ -7,7 +7,7 @@
 
 // tinygl_point_t navigation(void);
 void navigation(tinygl_point_t* selectPosition, bool* isSelected);
-void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t length, orientation_t orientation);
+void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t length, orientation_t* orientation);
 
 void setup_phase(void);
 

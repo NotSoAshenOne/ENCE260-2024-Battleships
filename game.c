@@ -9,7 +9,7 @@
 #include "tinygl.h"
 #include "pacer.h"
 #include "navswitch.h"
-#include "../fonts/font5x7_1.h"
+#include "button.h"
 
 typedef enum {
     SETUP,
@@ -88,11 +88,12 @@ void navigation(tinygl_point_t* selectPosition, bool* isSelected)
         tinygl_draw_point((*selectPosition), 1);
 }
 
-void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t length, orientation_t orientation) 
+void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t length, orientation_t* orientation) 
 {
         /* TODO: Call the navswitch update function.  */
         tinygl_clear ();
         navswitch_update ();
+        button_update ();
         /* TODO: Increment character if NORTH is pressed.  */
         if (navswitch_push_event_p (0)) {
             if (selectPosition->y == 0) {
@@ -103,6 +104,7 @@ void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t le
         }
         /* TODO: Decrement character if SOUTH is pressed.  */
         else if (navswitch_push_event_p (2)) {
+            //if ((selectPosition->y == (6-length) && (*orientation == VERTICAL))||(selectPosition->y == 6 && (*orientation == HORIZONTAL)))  {
             if (selectPosition->y == 6) {
                 selectPosition->y = 0;
             } else {
@@ -110,6 +112,7 @@ void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t le
             }
         }
         else if (navswitch_push_event_p (1)) {
+            //if ((selectPosition->x == 4 && (*orientation == VERTICAL)) || (selectPosition->x == (4-length) && (*orientation == HORIZONTAL))) {
             if (selectPosition->x == 4) {
                 selectPosition->x = 0;
             } else {
@@ -124,7 +127,14 @@ void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t le
             }
         }
         else if (navswitch_push_event_p (4)) {
+            if ((*orientation) == HORIZONTAL) {
+                (*orientation) = VERTICAL;
+            } else {
+                (*orientation) = HORIZONTAL;
+            }
+        }
+        else if (button_push_event_p (0)) {
             (*isSelected) = true;
         }
-        draw_ship((selectPosition->y),(selectPosition->x), length, orientation);
+        draw_ship((selectPosition->y),(selectPosition->x), length, (*orientation));
 }

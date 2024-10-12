@@ -2,5 +2,6 @@
 #define SETUP_H
 
 void setup_phase(void);
+void placeShips (void);
 
 #endif // SETUP_H
