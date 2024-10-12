@@ -26,6 +26,11 @@ typedef struct {
     ship_part_t parts[MAX_SHIP_LENGTH];
 } ship_t;
 
+
+
+ship_part_t parts[10];
+
+
 extern ship_t ships[MAX_SHIPS];
 extern uint8_t ship_count;
 

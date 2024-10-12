@@ -10,17 +10,17 @@
 
 int main(void)
 {
-    system_init();
-    ir_uart_init ();
-    button_init ();
-    tinygl_init(1000);
-    pacer_init (300);
-    led_init();
-    led_set(LED1, 0);
+    // system_init();
+    // ir_uart_init ();
+    // button_init ();
+    // tinygl_init(1000);
+    // pacer_init (300);
+    // led_init();
+    // led_set(LED1, 0);
 
-    tinygl_font_set (&font5x7_1);
+    // tinygl_font_set (&font5x7_1);
 
-    game_loop();
+    // game_loop();
     
     
     // tinygl_point_t selectedPosition;

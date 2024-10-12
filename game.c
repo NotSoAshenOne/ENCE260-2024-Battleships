@@ -167,4 +167,12 @@ void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t le
             (*isSelected) = true;
         }
         draw_ship((selectPosition->y),(selectPosition->x), length, (*orientation));
+        drawAllShips();
+}
+
+void drawAllShips() {
+    for (size_t i = 0; i < 10; i++) {
+        tinygl_point_t part = tinygl_point(parts[i].col, parts[i].row);
+        tinygl_draw_point(part, 1);
+    }
 }

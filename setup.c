@@ -5,11 +5,12 @@
 #include "ship.h"
 #include "game.h"
 #include <stdbool.h>
+#include "setup.h"
 
 ship_t ships[MAX_SHIPS];
 uint8_t ship_count = 0;
 
-void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation);
+//void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation);
 void update_ship(ship_t *ship, uint8_t row, uint8_t col);
 void rotate_ship(ship_t *ship);
 
@@ -19,7 +20,7 @@ void setup_phase(void)
     navswitch_init();
     pacer_init(1000);
 
-    add_ship(3, 1, 3, VERTICAL);
+    //add_ship(3, 1, 3, VERTICAL);
 
     tinygl_clear();
     for (uint8_t i = 0; i < ship_count; i++) {
@@ -60,7 +61,7 @@ void rotate_ship(ship_t *ship) {
     update_ship(ship, ship->row, ship->col);
 }
 
-void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation) {
+void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation, uint8_t shipNum) {
     // Don't need to have a handle for this. Can just specify the number of ships a player can have and then add them in a for loop.
     if (ship_count >= MAX_SHIPS) {
         // Handle error: too many ships
@@ -73,7 +74,7 @@ void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientatio
         return;
     }
 
-    ship_t ship = {row, col, length, orientation, {{0, 0}}};
+    //ship_t ship = {row, col, length, orientation, {{0, 0}}};
     // Could probably simplify by specifying the orientation they appear in as default and then the player can change.
     // Same as draw ship??
     if (orientation == HORIZONTAL) {
@@ -85,7 +86,7 @@ void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientatio
         }
 
         for (int i = 0; i < length; i++) {
-            ship.parts[i] = (ship_part_t){row, col + i};
+            parts[shipNum+i] = (ship_part_t){row, col + i};
         }
     } else {
         int end_row = row + length - 1;
@@ -96,11 +97,11 @@ void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientatio
         }
 
         for (int i = 0; i < length; i++) {
-            ship.parts[i] = (ship_part_t){row + i, col};
+            parts[shipNum+i] = (ship_part_t){row + i, col};
         }
     }
     
-    ships[ship_count++] = ship;
+    //ships[ship_count++] = ship;
 
 }
 
@@ -122,6 +123,7 @@ void placeShips()
             shipNavigation(&startPosition, isSelected, 2, &ship_orientation);
         } else {
             draw_ship((startPosition.y), (startPosition.x), 2, *ship_orientation);
+            add_ship((startPosition.y), (startPosition.x), 2, *ship_orientation, 0);
         }
         
     }
