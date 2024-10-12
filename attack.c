@@ -3,32 +3,36 @@
 #include "ir_uart.h"
 #include "tinygl.h"
 
+char received_char = ' ';
 
 void attack_phase(void)
 {
     while (1) {
         button_update();
-    
         if (button_push_event_p(0)) {
-            led_set(LED1, 1);
             // Broadcast the coordinate until a character is received
-            while (!ir_uart_read_ready_p()) {
-                send_coordinate(2, 3);
-            }
+                while (1) {
+                    // Check if a character is ready to be received
+                    if (ir_uart_read_ready_p()) {
+                        // Extract the received character
+                        received_char = ir_uart_getc(); 
+                        // Check if the received character is '-' or '+'
+                        if (received_char == '-' || received_char == '+') {
+                            break; // Exit the loop if '-' or '+' is received
+                        }
+                    }
+                    // Send the coordinate if the received character is not '-' or '+'
+                    send_coordinate(1, 4);
+                }
             
-            // Extract the received character
-            char received_char = ir_uart_getc();
-            
-            // Determine if it's a hit or a miss
             if (received_char == '+') {
-                led_init();
-                tinygl_draw_char('H', tinygl_point(0, 0));
-            } else if (received_char == '-') {
-                tinygl_draw_char('M', tinygl_point(0, 0));
-            } 
-            led_set(LED1, 0);
-            tinygl_update();
+                led_set(LED1, 1);
+            } else {
+                led_set(LED1, 0);
+            }
             break; // Exit the loop once a character is received and processed
+        } else {
+            break;
         }
     }
 }
