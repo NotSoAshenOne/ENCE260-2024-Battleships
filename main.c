@@ -43,5 +43,6 @@ int main(void)
     //     }
     // }
     placeShips();
+    selectAttack();
     return 0;
 }
