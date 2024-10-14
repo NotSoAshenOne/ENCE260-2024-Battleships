@@ -43,11 +43,11 @@ void update_ship(ship_t *ship, uint8_t row, uint8_t col) {
 
     if (ship->orientation == HORIZONTAL) {
         for (int i = 0; i < ship->length; i++) {
-            ship->part[i] = (ship_part_t){row, col + i};
+            //ship->part[i] = (ship_part_t){row, col + i};
         }
     } else {
         for (int i = 0; i < ship->length; i++) {
-            ship->part[i] = (ship_part_t){row + i, col};
+            //ship->part[i] = (ship_part_t){row + i, col};
         }
     }
 }
@@ -109,19 +109,28 @@ void rotate_ship(ship_t *ship) {
 
 void placeShips() 
 {
+    bool isSelected;
+    orientation_t ship_orientation;
+    tinygl_point_t startPosition;
+    uint8_t length;
 
-    bool isSelected = false; 
-    orientation_t ship_orientation = HORIZONTAL;
-    tinygl_point_t startPosition = tinygl_point(2,3);
+    for (size_t i = 0; i < 3; i++) {
+        isSelected = false; 
+        ship_orientation = HORIZONTAL;
+        startPosition = tinygl_point(2,3);
+        length = 3;
 
-    while (isSelected == false) {
-        pacer_wait ();
-        tinygl_update ();
-        shipNavigation(&startPosition, &isSelected, 3, &ship_orientation);    
+        while (isSelected == false) {
+            pacer_wait ();
+            tinygl_update ();
+            shipNavigation(&startPosition, &isSelected, 3, &ship_orientation);    
+        }
+
+        addShip(startPosition.y, startPosition.x, length, ship_orientation, i);
+        
     }
-
     while (1) {
-        draw_ship((startPosition.y), (startPosition.x), 4, (ship_orientation));
+        //draw_ship((startPosition.y), (startPosition.x), 4, (ship_orientation));
+        drawAllShips();
     }
-    
 }
