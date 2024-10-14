@@ -18,7 +18,7 @@ typedef enum {
 typedef struct {
     uint8_t row;
     uint8_t col;
-    bool hit;
+    // bool hit;
 } ship_part_t;
 
 typedef struct {
@@ -28,11 +28,6 @@ typedef struct {
     orientation_t orientation;
 } ship_t;
 
-//uint8_t[] ship = [0, 3, 6];
-
-extern ship_part_t shipParts[9];
-
-
 extern ship_t ships[MAX_SHIPS];
 extern ship_part_t parts[MAX_SHIP_PARTS];
 extern uint8_t ship_count;
@@ -41,5 +36,6 @@ void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientati
 void addShip(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation, uint8_t shipNum);
 void addShipPart(uint8_t shipNum);
 void drawAllParts(uint8_t partN);
+void drawAllShips(uint8_t shipN);
 
-#endif // GAME_H
+#endif // SHIP_H

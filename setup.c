@@ -8,6 +8,7 @@
 #include "setup.h"
 
 ship_t ships[MAX_SHIPS];
+ship_part_t parts[MAX_SHIP_PARTS];
 uint8_t ship_count = 0;
 
 //void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation);
@@ -140,11 +141,11 @@ void placeShips()
         tinygl_update ();
 
         // drawAllShips();
-        // drawAllParts(partN);
-        navigation(&startPosition, &isSelected, shipN, partN);
+        drawAllParts(partN);
+        //navigation(&startPosition, &isSelected, shipN, partN);
         
         shipN = (shipN+1)%3;
-        partN = (partN+1)%2;
+        partN = (partN+1)%9;
         // drawAllParts();
     }
 }
