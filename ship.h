@@ -18,7 +18,7 @@ typedef enum {
 typedef struct {
     uint8_t row;
     uint8_t col;
-    // bool hit;
+    bool hit;
 } ship_part_t;
 
 typedef struct {

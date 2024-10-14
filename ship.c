@@ -63,27 +63,27 @@ void addShipPart(uint8_t shipNum)
         index = 0;
         for (size_t i = 0; i < 2; i++) {
             if (ship.orientation == HORIZONTAL) {
-                parts[i+index] = (ship_part_t){ship.row, ((ship.col)+i)};
+                parts[i+index] = (ship_part_t){ship.row, ((ship.col)+i), false};
             } else {
-                parts[i+index] = (ship_part_t){((ship.row)+i), ship.col};
+                parts[i+index] = (ship_part_t){((ship.row)+i), ship.col, false};
             }
         }
     } else if (shipNum == 1) {
         index = 2;
         for (size_t i = 0; i < 3; i++) {
             if (ship.orientation == HORIZONTAL) {
-                parts[i+index] = (ship_part_t){ship.row, ((ship.col)+i)};
+                parts[i+index] = (ship_part_t){ship.row, ((ship.col)+i), false};
             } else {
-                parts[i+index] = (ship_part_t){((ship.row)+i), ship.col};
+                parts[i+index] = (ship_part_t){((ship.row)+i), ship.col, false};
             }
         }
     } else if (shipNum ==2) {
         index = 5;
         for (size_t i = 0; i < 4; i++) {
             if (ship.orientation == HORIZONTAL) {
-                parts[i+index] = (ship_part_t){ship.row, ((ship.col)+i)};
+                parts[i+index] = (ship_part_t){ship.row, ((ship.col)+i), false};
             } else {
-                parts[i+index] = (ship_part_t){((ship.row)+i), ship.col};
+                parts[i+index] = (ship_part_t){((ship.row)+i), ship.col, false};
             }
         }
     }
@@ -98,5 +98,9 @@ void drawAllParts(uint8_t partN)
 {    
     ship_part_t part = parts[partN];
     tinygl_point_t point = {.x = part.col, .y = part.row};
-    tinygl_draw_point(point, 1);    
+    if (part.hit) {
+        tinygl_draw_point(point, 1);
+    } else {
+        tinygl_draw_point(point, 1);
+    }    
 }
