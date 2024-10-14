@@ -118,19 +118,33 @@ void placeShips()
         isSelected = false; 
         ship_orientation = HORIZONTAL;
         startPosition = tinygl_point(2,3);
-        length = 3;
+        length = (i+2);
 
         while (isSelected == false) {
             pacer_wait ();
             tinygl_update ();
-            shipNavigation(&startPosition, &isSelected, 3, &ship_orientation);    
+            shipNavigation(&startPosition, &isSelected, length, &ship_orientation);    
         }
 
         addShip(startPosition.y, startPosition.x, length, ship_orientation, i);
-        
+        addShipPart(i);
     }
+    startPosition = tinygl_point(2,3);
+    isSelected = false; 
+    uint8_t shipN = 0;
+    uint8_t partN = 0;
     while (1) {
         //draw_ship((startPosition.y), (startPosition.x), 4, (ship_orientation));
-        drawAllShips();
+        
+        pacer_wait ();
+        tinygl_update ();
+
+        // drawAllShips();
+        // drawAllParts(partN);
+        navigation(&startPosition, &isSelected, shipN, partN);
+        
+        shipN = (shipN+1)%3;
+        partN = (partN+1)%2;
+        // drawAllParts();
     }
 }

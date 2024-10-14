@@ -45,10 +45,11 @@ void game_loop(void)
     }
 }
 
-void navigation(tinygl_point_t* selectPosition, bool* isSelected) 
+void navigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t shipN, uint8_t partN) 
 {
         /* TODO: Call the navswitch update function.  */
-        tinygl_draw_point((*selectPosition), 0);
+        tinygl_clear();
+        //tinygl_draw_point((*selectPosition), 0);
         navswitch_update ();
         /* TODO: Increment character if NORTH is pressed.  */
         if (navswitch_push_event_p (0)) {
@@ -83,7 +84,12 @@ void navigation(tinygl_point_t* selectPosition, bool* isSelected)
         else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
             (*isSelected) = true;
         }
+        if (partN%2 == 0) {
+            drawAllShips(shipN);
+        }
+        
         tinygl_draw_point((*selectPosition), 1);
+        
 }
 
 void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t length, orientation_t* orientation) 
@@ -165,9 +171,17 @@ void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t le
         draw_ship((selectPosition->y),(selectPosition->x), length, (*orientation));
 }
 
-void drawAllShips() {
-    for (size_t i = 0; i < 3; i++) {
-        ship_t ship = ships[i];
-        draw_ship(ship.row, ship.col, ship.length, ship.orientation);
-    }
+void drawAllShips(uint8_t shipN) {
+    // for (size_t i = 0; i < 3; i++) {
+    //     ship_t ship = ships[i];
+    //     draw_ship(ship.row, ship.col, ship.length, ship.orientation);
+    // }
+    ship_t ship = ships[shipN];
+    ship_t ship1 = ships[1];
+    ship_t ship2 = ships[2];
+    draw_ship(ship.row, ship.col, ship.length, ship.orientation);
+    // draw_ship(ship1.row, ship1.col, ship1.length, ship1.orientation);
+    // draw_ship(ship2.row, ship2.col, ship2.length, ship2.orientation);
+
 }
+

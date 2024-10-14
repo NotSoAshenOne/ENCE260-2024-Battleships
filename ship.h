@@ -8,6 +8,7 @@
 #define COLUMNS 5
 #define MAX_SHIPS 3
 #define MAX_SHIP_LENGTH 7
+#define MAX_SHIP_PARTS 9
 
 typedef enum {
     HORIZONTAL,
@@ -27,16 +28,18 @@ typedef struct {
     orientation_t orientation;
 } ship_t;
 
-
-
-extern ship_part_t parts[9];
 //uint8_t[] ship = [0, 3, 6];
+
+extern ship_part_t shipParts[9];
 
 
 extern ship_t ships[MAX_SHIPS];
+extern ship_part_t parts[MAX_SHIP_PARTS];
 extern uint8_t ship_count;
 
 void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation);
 void addShip(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation, uint8_t shipNum);
+void addShipPart(uint8_t shipNum);
+void drawAllParts(uint8_t partN);
 
 #endif // GAME_H

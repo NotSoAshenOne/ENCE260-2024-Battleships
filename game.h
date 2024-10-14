@@ -13,10 +13,11 @@
 #include <stdbool.h>
 
 // tinygl_point_t navigation(void);
-void navigation(tinygl_point_t* selectPosition, bool* isSelected);
+void navigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t shipN, uint8_t partN);
 void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t length, orientation_t* orientation);
 
-void drawAllShips(void);
+void drawAllShips(uint8_t shipN);
+
 void setup_phase(void);
 
 #endif // GAME_H
