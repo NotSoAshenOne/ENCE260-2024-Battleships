@@ -17,7 +17,7 @@ game.o: game.c setup.h attack.h defend.h winlose.h ship.h ../../drivers/avr/syst
 
 ship.o: ship.c ship.h ../../drivers/avr/system.h ../../utils/tinygl.h 
 
-setup.o: setup.c ship.h setup.h game.h ../../drivers/avr/pio.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/navswitch.h
+setup.o: setup.c ship.h setup.h game.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/navswitch.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 attack.o: attack.c attack.h

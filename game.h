@@ -14,7 +14,7 @@
 
 // tinygl_point_t navigation(void);
 void navigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t shipN, uint8_t partN);
-void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t length, orientation_t* orientation);
+void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t length, orientation_t* orientation, uint8_t shipN);
 
 void drawAllShips(uint8_t shipN);
 

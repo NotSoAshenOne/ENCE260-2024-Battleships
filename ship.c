@@ -62,57 +62,41 @@ void addShipPart(uint8_t shipNum)
         /* code */
         index = 0;
         for (size_t i = 0; i < 2; i++) {
-
             if (ship.orientation == HORIZONTAL) {
-                // ship_part_t shipPart = {.row = ship.row, .col = ((ship.col)+i), .hit = false};
                 parts[i+index] = (ship_part_t){ship.row, ((ship.col)+i)};
             } else {
-                // ship_part_t shipPart = {.row = ((ship.row)+i), .col = ship.col, .hit = false};
                 parts[i+index] = (ship_part_t){((ship.row)+i), ship.col};
             }
-            // parts[i+index] = shipPart;
-            // index++;
         }
     } else if (shipNum == 1) {
         index = 2;
         for (size_t i = 0; i < 3; i++) {
             if (ship.orientation == HORIZONTAL) {
-                // ship_part_t shipPart = {.row = ship.row, .col = ((ship.col)+i), .hit = false};
                 parts[i+index] = (ship_part_t){ship.row, ((ship.col)+i)};
             } else {
-                // ship_part_t shipPart = {.row = ((ship.row)+i), .col = ship.col, .hit = false};
                 parts[i+index] = (ship_part_t){((ship.row)+i), ship.col};
             }
-            //parts[i+index] = shipPart;
-            // index++;
         }
     } else if (shipNum ==2) {
         index = 5;
         for (size_t i = 0; i < 4; i++) {
             if (ship.orientation == HORIZONTAL) {
-                // ship_part_t shipPart = {.row = ship.row, .col = ((ship.col)+i), .hit = false};
                 parts[i+index] = (ship_part_t){ship.row, ((ship.col)+i)};
             } else {
-                // ship_part_t shipPart = {.row = ((ship.row)+i), .col = ship.col, .hit = false};
                 parts[i+index] = (ship_part_t){((ship.row)+i), ship.col};
             }
-            // parts[i+index] = shipPart;
-            // index++;
         }
     }
-    
 }
 
-void drawAllShips(uint8_t shipN) {
+void drawAllShips(uint8_t shipN) 
+{
     ship_t ship = ships[shipN];
     draw_ship(ship.row, ship.col, ship.length, ship.orientation);
-
 }
-void drawAllParts(uint8_t partN) {
-    
-    //for (size_t i = 0; i < 9; i++) {
-        ship_part_t part = parts[partN];
-        tinygl_point_t point = {.x = part.col, .y = part.row};
-        tinygl_draw_point(point, 1);
-    //}
+void drawAllParts(uint8_t partN) 
+{    
+    ship_part_t part = parts[partN];
+    tinygl_point_t point = {.x = part.col, .y = part.row};
+    tinygl_draw_point(point, 1);    
 }

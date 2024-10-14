@@ -84,15 +84,16 @@ void navigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t shipN,
         else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
             (*isSelected) = true;
         }
+
         if (partN%2 == 0) {
             drawAllShips(shipN);
         }
-        
+        //drawAllParts(partN);
         tinygl_draw_point((*selectPosition), 1);
         
 }
 
-void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t length, orientation_t* orientation) 
+void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t length, orientation_t* orientation, uint8_t shipN) 
 {
         /* TODO: Call the navswitch update function.  */
         tinygl_clear ();
@@ -169,6 +170,9 @@ void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t le
             (*isSelected) = true;
         }
         draw_ship((selectPosition->y),(selectPosition->x), length, (*orientation));
+        if (shipN != 10) {
+            drawAllShips(shipN);
+        }
 }
 
 

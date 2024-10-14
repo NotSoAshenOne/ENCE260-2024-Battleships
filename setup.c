@@ -1,10 +1,10 @@
-#include "pio.h"
+
 #include "tinygl.h"
 #include "pacer.h"
 #include "navswitch.h"
 #include "ship.h"
 #include "game.h"
-#include <stdbool.h>
+#include "system.h"
 #include "setup.h"
 
 ship_t ships[MAX_SHIPS];
@@ -54,11 +54,6 @@ void update_ship(ship_t *ship, uint8_t row, uint8_t col) {
 }
 
 void rotate_ship(ship_t *ship) {
-//     for (size_t i = 0; i < 9; i++) {
-//         tinygl_point_t part = tinygl_point(parts[i].col, parts[i].row);
-//         tinygl_draw_point(part, 1);
-//     }
-// }
     if (ship->orientation == HORIZONTAL) {
         ship->orientation = VERTICAL;
     } else {
@@ -66,47 +61,6 @@ void rotate_ship(ship_t *ship) {
     }
     update_ship(ship, ship->row, ship->col);
 }
-
-// void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation, uint8_t shipNum) {
-//     // Don't need to have a handle for this. Can just specify the number of ships a player can have and then add them in a for loop.
-//     // if (ship_count >= MAX_SHIPS) {
-//     //     // Handle error: too many ships
-//     //     return;
-//     // }
-//     // Same as the other one, we probs don't need this if we specify the lengths when allowing the player to draw up the ships.
-//     if (length < 1 || length > MAX_SHIP_LENGTH) {
-//         // Handle error: invalid ship length
-//         return;
-//     }
-//     if (orientation == HORIZONTAL) {
-//         int end_col = col + length - 1;
-
-//         if (end_col >= COLUMNS) {
-//             end_col = COLUMNS - 1;
-//             col = end_col - length + 1;
-//         }
-
-//         for (int i = 0; i < length; i++) {
-//             ship_part_t shipPart = {.row=row, .col=col+i, .hit=false};
-//             parts[shipNum+i] = shipPart;
-//         }
-//     } else {
-//         int end_row = row + length - 1;
-
-//         if (end_row >= ROWS) {
-//             end_row = ROWS - 1;
-//             row = end_row - length + 1;
-//         }
-
-//         for (int i = 0; i < length; i++) {
-//             ship_part_t shipPart = {.row=row+1, .col=col, .hit=false};
-//             parts[shipNum+i] = shipPart;
-//         }
-//     }
-    
-//     //ships[ship_count++] = ship;
-
-// }
 
 void placeShips() 
 {
@@ -120,11 +74,15 @@ void placeShips()
         ship_orientation = HORIZONTAL;
         startPosition = tinygl_point(2,3);
         length = (i+2);
-
+        uint8_t shipN = 10;
         while (isSelected == false) {
             pacer_wait ();
             tinygl_update ();
-            shipNavigation(&startPosition, &isSelected, length, &ship_orientation);    
+            shipNavigation(&startPosition, &isSelected, length, &ship_orientation, shipN);
+            if (i > 0) {
+                shipN = (shipN+1)%i;   
+            }
+             
         }
 
         addShip(startPosition.y, startPosition.x, length, ship_orientation, i);
@@ -140,9 +98,9 @@ void placeShips()
         pacer_wait ();
         tinygl_update ();
 
-        // drawAllShips();
-        drawAllParts(partN);
-        //navigation(&startPosition, &isSelected, shipN, partN);
+        
+        navigation(&startPosition, &isSelected, shipN, partN);
+        //drawAllParts(partN);
         
         shipN = (shipN+1)%3;
         partN = (partN+1)%9;
