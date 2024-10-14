@@ -43,16 +43,21 @@ void update_ship(ship_t *ship, uint8_t row, uint8_t col) {
 
     if (ship->orientation == HORIZONTAL) {
         for (int i = 0; i < ship->length; i++) {
-            ship->parts[i] = (ship_part_t){row, col + i};
+            ship->part[i] = (ship_part_t){row, col + i};
         }
     } else {
         for (int i = 0; i < ship->length; i++) {
-            ship->parts[i] = (ship_part_t){row + i, col};
+            ship->part[i] = (ship_part_t){row + i, col};
         }
     }
 }
 
 void rotate_ship(ship_t *ship) {
+//     for (size_t i = 0; i < 9; i++) {
+//         tinygl_point_t part = tinygl_point(parts[i].col, parts[i].row);
+//         tinygl_draw_point(part, 1);
+//     }
+// }
     if (ship->orientation == HORIZONTAL) {
         ship->orientation = VERTICAL;
     } else {
@@ -61,70 +66,62 @@ void rotate_ship(ship_t *ship) {
     update_ship(ship, ship->row, ship->col);
 }
 
-void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation, uint8_t shipNum) {
-    // Don't need to have a handle for this. Can just specify the number of ships a player can have and then add them in a for loop.
-    if (ship_count >= MAX_SHIPS) {
-        // Handle error: too many ships
+// void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation, uint8_t shipNum) {
+//     // Don't need to have a handle for this. Can just specify the number of ships a player can have and then add them in a for loop.
+//     // if (ship_count >= MAX_SHIPS) {
+//     //     // Handle error: too many ships
+//     //     return;
+//     // }
+//     // Same as the other one, we probs don't need this if we specify the lengths when allowing the player to draw up the ships.
+//     if (length < 1 || length > MAX_SHIP_LENGTH) {
+//         // Handle error: invalid ship length
+//         return;
+//     }
+//     if (orientation == HORIZONTAL) {
+//         int end_col = col + length - 1;
 
-        return;
-    }
-    // Same as the other one, we probs don't need this if we specify the lengths when allowing the player to draw up the ships.
-    if (length < 1 || length > MAX_SHIP_LENGTH) {
-        // Handle error: invalid ship length
-        return;
-    }
+//         if (end_col >= COLUMNS) {
+//             end_col = COLUMNS - 1;
+//             col = end_col - length + 1;
+//         }
 
-    //ship_t ship = {row, col, length, orientation, {{0, 0}}};
-    // Could probably simplify by specifying the orientation they appear in as default and then the player can change.
-    // Same as draw ship??
-    if (orientation == HORIZONTAL) {
-        int end_col = col + length - 1;
+//         for (int i = 0; i < length; i++) {
+//             ship_part_t shipPart = {.row=row, .col=col+i, .hit=false};
+//             parts[shipNum+i] = shipPart;
+//         }
+//     } else {
+//         int end_row = row + length - 1;
 
-        if (end_col >= COLUMNS) {
-            end_col = COLUMNS - 1;
-            col = end_col - length + 1;
-        }
+//         if (end_row >= ROWS) {
+//             end_row = ROWS - 1;
+//             row = end_row - length + 1;
+//         }
 
-        for (int i = 0; i < length; i++) {
-            parts[shipNum+i] = (ship_part_t){row, col + i, false};
-        }
-    } else {
-        int end_row = row + length - 1;
-
-        if (end_row >= ROWS) {
-            end_row = ROWS - 1;
-            row = end_row - length + 1;
-        }
-
-        for (int i = 0; i < length; i++) {
-            parts[shipNum+i] = (ship_part_t){row + i, col, false};
-        }
-    }
+//         for (int i = 0; i < length; i++) {
+//             ship_part_t shipPart = {.row=row+1, .col=col, .hit=false};
+//             parts[shipNum+i] = shipPart;
+//         }
+//     }
     
-    //ships[ship_count++] = ship;
+//     //ships[ship_count++] = ship;
 
-}
+// }
 
 void placeShips() 
 {
-    bool* isSelected;
-    (*isSelected) = false;
-    orientation_t* ship_orientation;
-    *ship_orientation = HORIZONTAL;
-    system_init ();
-    tinygl_init (1000);
+
+    bool isSelected = false; 
+    orientation_t ship_orientation = HORIZONTAL;
     tinygl_point_t startPosition = tinygl_point(2,3);
-    tinygl_draw_point((startPosition), 1);
-    pacer_init(1000);
-    while (1) {
+
+    while (isSelected == false) {
         pacer_wait ();
         tinygl_update ();
-        if (!(*isSelected)) {
-            shipNavigation(&startPosition, isSelected, 2, &ship_orientation);
-        } else {
-            draw_ship((startPosition.y), (startPosition.x), 2, *ship_orientation);
-            add_ship((startPosition.y), (startPosition.x), 2, *ship_orientation, 0);
-        }
-        
+        shipNavigation(&startPosition, &isSelected, 3, &ship_orientation);    
     }
+
+    while (1) {
+        draw_ship((startPosition.y), (startPosition.x), 4, (ship_orientation));
+    }
+    
 }

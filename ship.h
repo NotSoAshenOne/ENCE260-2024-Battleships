@@ -25,12 +25,13 @@ typedef struct {
     uint8_t col;
     uint8_t length;
     orientation_t orientation;
-    ship_part_t parts[MAX_SHIP_LENGTH];
+    ship_part_t part[MAX_SHIP_LENGTH];
 } ship_t;
 
 
 
-ship_part_t parts[10];
+extern ship_part_t parts[9];
+//uint8_t[] ship = [0, 3, 6];
 
 
 extern ship_t ships[MAX_SHIPS];

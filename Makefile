@@ -12,7 +12,7 @@ all: game.out
 main.o: main.c game.h ship.h ../../drivers/avr/system.h ../../utils/pacer.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-game.o: game.c setup.h attack.h defend.h winlose.h ../../drivers/avr/system.h ../../drivers/avr/pio.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/navswitch.h  ../../drivers/button.h
+game.o: game.c setup.h attack.h defend.h winlose.h ship.h ../../drivers/avr/system.h ../../drivers/avr/pio.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/navswitch.h  ../../drivers/button.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 ship.o: ship.c game.h setup.h attack.h defend.h winlose.h ../../drivers/avr/system.h ../../drivers/avr/pio.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/navswitch.h ../../utils/font.h

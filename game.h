@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include "tinygl.h"
 #include "ship.h"
+#include <stdbool.h>
 
 // tinygl_point_t navigation(void);
 void navigation(tinygl_point_t* selectPosition, bool* isSelected);

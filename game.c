@@ -10,6 +10,7 @@
 #include "pacer.h"
 #include "navswitch.h"
 #include "button.h"
+#include <stdbool.h>
 
 
 typedef enum {
@@ -58,28 +59,28 @@ void navigation(tinygl_point_t* selectPosition, bool* isSelected)
             }
         }
         /* TODO: Decrement character if SOUTH is pressed.  */
-        else if (navswitch_push_event_p (2)) {
+        else if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
             if (selectPosition->y == 6) {
                 selectPosition->y = 0;
             } else {
                 selectPosition->y += 1;
             }
         }
-        else if (navswitch_push_event_p (1)) {
+        else if (navswitch_push_event_p (NAVSWITCH_EAST)) {
             if (selectPosition->x == 4) {
                 selectPosition->x = 0;
             } else {
                 selectPosition->x += 1;
             }
         }
-        else if (navswitch_push_event_p (3)) {
+        else if (navswitch_push_event_p (NAVSWITCH_WEST)) {
             if (selectPosition->x == 0) {
                 selectPosition->x = 4;
             } else {
             selectPosition->x += -1;
             }
         }
-        else if (navswitch_push_event_p (4)) {
+        else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
             (*isSelected) = true;
         }
         tinygl_draw_point((*selectPosition), 1);
@@ -91,11 +92,17 @@ void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t le
         tinygl_clear ();
         navswitch_update ();
         button_update ();
-        /* TODO: Increment character if NORTH is pressed.  */
-        if (navswitch_push_event_p (0)) {
+        if (button_push_event_p (0)) {
+            if ((*orientation) == HORIZONTAL) {
+                (*orientation) = VERTICAL;
+            } else {
+                (*orientation) = HORIZONTAL;
+            }
+        }
+        else if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
             if (*orientation == VERTICAL) {
                 if (selectPosition->y == 0) {
-                    selectPosition->y = (6-length+1);
+                    selectPosition->y = (7-length);
                 } else {
                     selectPosition->y += -1;
                 }
@@ -106,12 +113,10 @@ void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t le
                     selectPosition->y += -1;
                 }
             }
-        }
-        /* TODO: Decrement character if SOUTH is pressed.  */
-        else if (navswitch_push_event_p (2)) {
-            //if ((selectPosition->y == (6-length) && (*orientation == VERTICAL))||(selectPosition->y == 6 && (*orientation == HORIZONTAL)))  {
+        } 
+        else if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
             if (*orientation == VERTICAL) {
-                if (selectPosition->y == (6-length+1)) {
+                if (selectPosition->y == (7-length)) {
                     selectPosition->y = 0;
                 } else {
                     selectPosition->y += 1;
@@ -124,10 +129,9 @@ void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t le
                 }
             }
         }
-        else if (navswitch_push_event_p (1)) {
-            //if ((selectPosition->x == 4 && (*orientation == VERTICAL)) || (selectPosition->x == (4-length) && (*orientation == HORIZONTAL))) {
+        else if (navswitch_push_event_p (NAVSWITCH_EAST)) {
             if (*orientation == HORIZONTAL) {
-                if (selectPosition->x == (4-length+1)) {
+                if (selectPosition->x == (5-length)) {
                     selectPosition->x = 0;
                 } else {
                     selectPosition->x += 1;
@@ -140,10 +144,10 @@ void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t le
                 }
             }
         }
-        else if (navswitch_push_event_p (3)) {
+        else if (navswitch_push_event_p (NAVSWITCH_WEST)) {
             if (*orientation == HORIZONTAL) {
                 if (selectPosition->x == 0) {
-                    selectPosition->x = (4-length+1);
+                    selectPosition->x = (5-length);
                 } else {
                     selectPosition->x += -1;
                 }
@@ -154,25 +158,17 @@ void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t le
                 selectPosition->x += -1;
                 }
             }
-            
         }
-        else if (navswitch_push_event_p (4)) {
-            if ((*orientation) == HORIZONTAL) {
-                (*orientation) = VERTICAL;
-            } else {
-                (*orientation) = HORIZONTAL;
-            }
-        }
-        else if (button_push_event_p (0)) {
+        else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
             (*isSelected) = true;
         }
         draw_ship((selectPosition->y),(selectPosition->x), length, (*orientation));
-        drawAllShips();
+        //drawAllShips();
 }
 
-void drawAllShips() {
-    for (size_t i = 0; i < 10; i++) {
-        tinygl_point_t part = tinygl_point(parts[i].col, parts[i].row);
-        tinygl_draw_point(part, 1);
-    }
-}
+// void drawAllShips() {
+//     for (size_t i = 0; i < 9; i++) {
+//         tinygl_point_t part = tinygl_point(parts[i].col, parts[i].row);
+//         tinygl_draw_point(part, 1);
+//     }
+// }
