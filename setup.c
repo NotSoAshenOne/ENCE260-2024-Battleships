@@ -107,7 +107,7 @@ void placeShips()
     for (size_t i = 0; i < 3; i++) {
         isSelected = false; 
         ship_orientation = HORIZONTAL;
-        startPosition = tinygl_point(2,3);
+        startPosition = tinygl_point(0,0);
         length = (i+2);
         uint8_t shipN = 10;
         while (isSelected == false) {
