@@ -3,11 +3,16 @@
 #include "tinygl.h"
 #include <stdbool.h>
 
-
+/*
+Initialisation of variables
+*/
 uint8_t ship_positions[ROWS][COLUMNS] = {0};
-
 orientation_t ship_orientation = HORIZONTAL;
 
+/*
+Draws a ship to the on the matrix screen.
+Checks if the ship is horizontal or vertical and then increments from the ship origin until it reaches the ship length.
+*/
 void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation)
 {
     tinygl_init(1000);
@@ -47,19 +52,26 @@ void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientati
     tinygl_update();
 }
 
-void addShip(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation, uint8_t shipNum) 
+/*
+Adds a ship_t to the ships array.
+*/
+void addShip(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation, uint8_t ship_num) 
 {
     ship_t shipAdd = {.row = row, .col = col, .length = length, .orientation = orientation, .sunk = false};
-    ships[shipNum] = shipAdd;    
+    ships[ship_num] = shipAdd;    
 }
 
-
-void addShipPart(uint8_t shipNum)
+/*
+Adds the individual parts of a ship to the parts matrix.
+Checks if the ship is horizontal or a vertical and increments the column and row values respectively.
+params ship_num is the ship number from 0,1,2 that the player will place.
+*/
+void addShipPart(uint8_t ship_num)
 {
-    ship_t ship = ships[shipNum];
+    ship_t ship = ships[ship_num];
     uint8_t index;
     ship_part_t shipPart;
-    if (shipNum == 0) {
+    if (ship_num == 0) {
         /* code */
         index = 0;
         for (size_t i = 0; i < 2; i++) {
@@ -69,7 +81,7 @@ void addShipPart(uint8_t shipNum)
                 parts[i+index] = (ship_part_t){((ship.row)+i), ship.col, false};
             }
         }
-    } else if (shipNum == 1) {
+    } else if (ship_num == 1) {
         index = 2;
         for (size_t i = 0; i < 3; i++) {
             if (ship.orientation == HORIZONTAL) {
@@ -78,7 +90,7 @@ void addShipPart(uint8_t shipNum)
                 parts[i+index] = (ship_part_t){((ship.row)+i), ship.col, false};
             }
         }
-    } else if (shipNum ==2) {
+    } else if (ship_num ==2) {
         index = 5;
         for (size_t i = 0; i < 4; i++) {
             if (ship.orientation == HORIZONTAL) {
@@ -90,11 +102,20 @@ void addShipPart(uint8_t shipNum)
     }
 }
 
+/*
+Draws all the ships in the ships array using the draw_ship function.
+[Possibly redundant?] <- Used in the ship navigation.
+ */
 void drawAllShips(uint8_t shipN) 
 {
     ship_t ship = ships[shipN];
     draw_ship(ship.row, ship.col, ship.length, ship.orientation);
 }
+
+/*
+Draws all the parts in the parts array using tinygl.
+Checks if a ship is hit and causes it to flash if it hit.
+*/
 void drawAllParts(uint8_t partN, uint8_t round) 
 {   
     ship_part_t part = parts[partN];
@@ -109,7 +130,12 @@ void drawAllParts(uint8_t partN, uint8_t round)
     }    
 }
 
-void display_ships (void) {
+/*
+Shows the parts of the ships on the screen to the user, lasts while the button is not pressed.
+Uses drawAllParts function.
+*/
+void display_ships (void) 
+{
     tinygl_clear();
     uint8_t roundN = 0;
     uint8_t partN = 0;
