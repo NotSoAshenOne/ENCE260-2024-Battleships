@@ -22,7 +22,7 @@ typedef enum {
 
 void game_loop(void)
 {
-    GameState state = ATTACK;
+    GameState state = SETUP;
     
     while (1)
     {

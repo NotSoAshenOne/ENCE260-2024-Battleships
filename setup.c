@@ -15,27 +15,61 @@ uint8_t ship_count = 0;
 void update_ship(ship_t *ship, uint8_t row, uint8_t col);
 void rotate_ship(ship_t *ship);
 
-void setup_phase(void)
-{
-    tinygl_init(1000);
-    navswitch_init();
-    pacer_init(1000);
+#define HANDSHAKE_CHAR '*'
+#define TIMEOUT 1000 // Timeout value in milliseconds
 
-    //add_ship(3, 1, 3, VERTICAL);
+bool handshake(void) {
+    char received_char = '\0';
+    bool is_device_1 = true;
+    int timeout_counter = 0;
 
-    tinygl_clear();
-    for (uint8_t i = 0; i < ship_count; i++) {
-        ship_t ship = ships[i];
-        draw_ship(ship.row, ship.col, ship.length, ship.orientation);
+    while (1) {
+        // Send handshake character
+        ir_uart_putc(HANDSHAKE_CHAR);
+
+        // Check if a character is received
+        if (ir_uart_read_ready_p()) {
+            received_char = ir_uart_getc();
+            if (received_char == HANDSHAKE_CHAR) {
+                is_device_1 = false; // This device becomes number 2
+                break;
+            }
+        }
+
+        // Increment the timeout counter
+        timeout_counter++;
+        if (timeout_counter > TIMEOUT) {
+            is_device_1 = true; // This device becomes number 1
+            break;
+        }
+
+        // Small delay to avoid busy-waiting (adjust as needed)
+        pacer_wait();
     }
-    tinygl_update();
 
-    tinygl_update();
-    navswitch_update();
-    if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
-        tinygl_clear();
-        rotate_ship(&ships[ship_count - 1]);
+    // Confirm the role assignment
+    if (is_device_1) {
+        tinygl_draw_char('1', tinygl_point(0, 0));
+        while (1) {
+            pacer_wait();
+            tinygl_update();
+        }
+    } else {
+        tinygl_draw_char('2', tinygl_point(0, 0));
+        while (1) {
+            pacer_wait();
+            tinygl_update();
+        }
     }
+
+    return is_device_1;
+}
+
+void setup_phase(void) {
+    char received_char = ' ';
+    placeShips();
+    bool is_device_1 = handshake();
+    // Use the is_device_1 variable as needed
 }
 
 void update_ship(ship_t *ship, uint8_t row, uint8_t col) {

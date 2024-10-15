@@ -7,7 +7,6 @@
 #include "pacer.h"
 #include <stdio.h>
 
-
 tinygl_point_t startPosition;
 
 char received_char = ' ';
