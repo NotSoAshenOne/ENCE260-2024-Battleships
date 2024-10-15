@@ -35,8 +35,8 @@ void defend_phase(void)
 }
 
 void check_hit(uint8_t x, uint8_t y) {
-    int hit = 0;
-    if (hit == 1) {
+    uint8_t partNum;
+    if (check_part_hit(x, y, &partNum)) {
         ir_uart_putc('+');
         led_set(LED1, 1);
     } else {
