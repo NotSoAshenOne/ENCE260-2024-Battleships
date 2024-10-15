@@ -62,8 +62,6 @@ void rotate_ship(ship_t *ship) {
     update_ship(ship, ship->row, ship->col);
 }
 
-tinygl_point_t startPosition;
-
 void placeShips() 
 {
     bool isSelected;
@@ -87,27 +85,5 @@ void placeShips()
         }
         addShip(startPosition.y, startPosition.x, length, ship_orientation, i);
         addShipPart(i);
-    }
-}
-
-void selectAttack()
-{
-    // tinygl_point_t selectPosition = tinygl_point(2,3);
-    startPosition = tinygl_point(2,3);
-    bool isSelected = false; 
-    uint8_t shipN = 0;
-    uint8_t partN = 0;
-    while (isSelected == false) {
-        //draw_ship((startPosition.y), (startPosition.x), 4, (ship_orientation));
-        pacer_wait ();
-        tinygl_update ();
-        navigation(&startPosition, &isSelected, shipN, partN);
-        //drawAllParts(partN);
-        shipN = (shipN+1)%3;
-        partN = (partN+1)%9;
-    }
-    attack_t attack = {.col = startPosition.x, .row = startPosition.y};
-    while(1) {
-        tinygl_draw_point(tinygl_point(attack.col, attack.row), 1);
     }
 }
