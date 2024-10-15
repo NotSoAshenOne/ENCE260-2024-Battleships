@@ -7,10 +7,16 @@ typedef enum {
     LOSE
 } winlose_t;
 
-void winlose_phase(void)
+void winlose_phase(bool win)
 {
     char c = ' ';
-    winlose_t result = LOSE; // Example initialization, change as needed
+    winlose_t result;
+    if (win){
+        result = WIN;
+    } else {
+        result = LOSE;
+    }
+    //winlose_t result = LOSE; // Example initialization, change as needed
 
     if (result == WIN) {
         c = 'W';

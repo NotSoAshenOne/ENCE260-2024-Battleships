@@ -91,3 +91,18 @@ void all_ships_sunk(void)
         // Send win lose
     }
 }
+
+/*
+Checks if all the ship_parts have been hit.
+Using while the all ships is not implemented.
+Returns a bool, true if all sunk and false if not.
+*/
+bool all_parts_sunk(void) {
+    bool all_sunk = true;
+    for (size_t i = 0; i <MAX_SHIP_PARTS; i++) {
+        if (parts[i].hit == false) {
+            return false;
+        }
+    }
+    return all_sunk;
+}

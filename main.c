@@ -16,13 +16,10 @@ int main(void)
     tinygl_init (1000);
     pacer_init (1000);
     led_init();
-    // led_set(LED1, 0);
+    led_set(LED1, 0);
+    tinygl_font_set (&font5x7_1);
 
-
-
-    // tinygl_font_set (&font5x7_1);
-
-    // game_loop();
+    game_loop();
     
     
     // tinygl_point_t selectedPosition;
@@ -42,11 +39,11 @@ int main(void)
     //         draw_ship(selectedPosition.y, selectedPosition.x, 2, ship_orientation);
     //     }
     // }
-    placeShips();
-    while (1) {
-        selectAttack();
-        display_ships();
-    }
+    // placeShips();
+    // while (1) {
+    //     selectAttack();
+    //     display_ships();
+    // }
 
     // uint8_t shipN = 0;
     // uint8_t partN = 0;

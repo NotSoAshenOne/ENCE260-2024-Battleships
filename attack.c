@@ -6,14 +6,15 @@
 #include "tinygl.h"
 #include "pacer.h"
 #include <stdio.h>
+#include <stdbool.h>
 
 tinygl_point_t startPosition;
 
 char received_char = ' ';
 
-void attack_phase(void)
+bool attack_phase(void)
 {
-    selectAttack();
+    return selectAttack();
 }
 
 // Function to encode coordinates (x, y) into a single ASCII character
@@ -27,7 +28,7 @@ void send_coordinate(uint8_t x, uint8_t y)
     ir_uart_putc (ch);
 }
 
-void selectAttack()
+bool selectAttack(void) // Maybe want to pass through a pointer to a uint8_t partNum instead of local partN
 {
     // tinygl_point_t selectPosition = tinygl_point(2,3);
     startPosition = tinygl_point(2,3);
@@ -45,7 +46,7 @@ void selectAttack()
     }
     attack_t attack = {.col = startPosition.x, .row = startPosition.y};
     uint8_t part_num;
-    check_part_hit(attack.col, attack.row, &part_num);
+    return check_part_hit(attack.col, attack.row, &part_num); // Made a bool checking if the attack was successful
     // while (1) {
     //     tinygl_draw_point(tinygl_point(attack.col, attack.row), 1);
     // }

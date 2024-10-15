@@ -1,6 +1,8 @@
 #ifndef WINLOSE_H
 #define WINLOSE_H
 
-void winlose_phase(void);
+#include <stdbool.h>
+
+void winlose_phase(bool win);
 
 #endif // WINLOSE_H

@@ -28,19 +28,31 @@ void game_loop(void)
     {
         if (state == SETUP)
         {
-            setup_phase();
+            // setup_phase();
+            state = ATTACK;
+            placeShips();
         }
         else if (state == ATTACK)
         {
-            attack_phase();
+            state = DEFEND;
+            if (attack_phase()) {
+                if(all_parts_sunk()) {
+                    state = WINLOSE;
+                } 
+            }
         }
         else if (state == DEFEND)
         {
-            defend_phase();
+            // defend_phase();
+            state = ATTACK;
+            display_ships();
         }
         else if (state == WINLOSE)
         {
-            winlose_phase();
+            while (1) {
+                winlose_phase(true);    
+            }
+            
         }
     }
 }
