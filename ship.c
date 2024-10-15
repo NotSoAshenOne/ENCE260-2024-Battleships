@@ -1,6 +1,7 @@
 #include "ship.h"
 #include "system.h"
 #include "tinygl.h"
+#include <stdbool.h>
 
 
 uint8_t ship_positions[ROWS][COLUMNS] = {0};
@@ -94,12 +95,15 @@ void drawAllShips(uint8_t shipN)
     ship_t ship = ships[shipN];
     draw_ship(ship.row, ship.col, ship.length, ship.orientation);
 }
-void drawAllParts(uint8_t partN) 
-{    
+void drawAllParts(uint8_t partN, uint8_t round) 
+{   
     ship_part_t part = parts[partN];
     tinygl_point_t point = {.x = part.col, .y = part.row};
     if (part.hit) {
-        tinygl_draw_point(point, 1);
+        tinygl_draw_point(point, 0);
+        if (round%5 == 0) {     // Making it flash by only showing every 5 times through all the parts. Use the same number for % must be prime.
+            tinygl_draw_point(point, 1);
+        }
     } else {
         tinygl_draw_point(point, 1);
     }    

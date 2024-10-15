@@ -22,7 +22,7 @@ int main(void)
 
     // tinygl_font_set (&font5x7_1);
 
-    game_loop();
+    // game_loop();
     
     
     // tinygl_point_t selectedPosition;
@@ -42,7 +42,16 @@ int main(void)
     //         draw_ship(selectedPosition.y, selectedPosition.x, 2, ship_orientation);
     //     }
     // }
-    //placeShips();
+    placeShips();
     //selectAttack();
+    uint8_t shipN = 0;
+    uint8_t partN = 0;
+    while (1) {
+        pacer_wait ();
+        tinygl_update ();
+        drawAllParts(partN, shipN);
+        shipN = (shipN+1)%5;
+        partN = (partN+1)%9;
+    }
     return 0;
 }

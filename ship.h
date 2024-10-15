@@ -36,7 +36,7 @@ extern uint8_t ship_count;
 void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation);
 void addShip(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation, uint8_t shipNum);
 void addShipPart(uint8_t shipNum);
-void drawAllParts(uint8_t partN);
+void drawAllParts(uint8_t partN, uint8_t round);
 void drawAllShips(uint8_t shipN);
 
 #endif // SHIP_H

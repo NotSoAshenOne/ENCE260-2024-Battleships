@@ -88,7 +88,7 @@ void navigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t shipN,
         // if (partN%2 == 0) {
         //     drawAllShips(shipN);
         // }
-        //drawAllParts(partN);
+        //drawAllParts(partN, shipN);
         
 }
 
