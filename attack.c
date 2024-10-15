@@ -44,33 +44,35 @@ void selectAttack()
         partN = (partN+1)%9;
     }
     attack_t attack = {.col = startPosition.x, .row = startPosition.y};
-    while (1) {
-        tinygl_draw_point(tinygl_point(attack.col, attack.row), 1);
-    }
+    uint8_t part_num;
+    check_part_hit(attack.col, attack.row, &part_num);
+    // while (1) {
+    //     tinygl_draw_point(tinygl_point(attack.col, attack.row), 1);
+    // }
     
     
-    while(1) {
-        // Broadcast the coordinate until a character is received
-        while (1) {
-            // Check if a character is ready to be received
-            if (ir_uart_read_ready_p()) {
-                // Extract the received character
-                received_char = ir_uart_getc(); 
-                // Check if the received character is '-' or '+'
-                if (received_char == '-' || received_char == '+') {
-                    break; // Exit the loop if '-' or '+' is received
-                }
-            }
-            // Send the coordinate if the received character is not '-' or '+'
-            send_coordinate(attack.col, attack.row);
-        }
+    // while(1) {
+    //     // Broadcast the coordinate until a character is received
+    //     while (1) {
+    //         // Check if a character is ready to be received
+    //         if (ir_uart_read_ready_p()) {
+    //             // Extract the received character
+    //             received_char = ir_uart_getc(); 
+    //             // Check if the received character is '-' or '+'
+    //             if (received_char == '-' || received_char == '+') {
+    //                 break; // Exit the loop if '-' or '+' is received
+    //             }
+    //         }
+    //         // Send the coordinate if the received character is not '-' or '+'
+    //         send_coordinate(attack.col, attack.row);
+    //     }
         
-        // Is it a hit or a miss?
-        if (received_char == '+') {
-            led_set(LED1, 1);
-        } else {
-            led_set(LED1, 0);
-        }
-        break; // Exit the loop once a character is received and processed
-    }
+    //     // Is it a hit or a miss?
+    //     if (received_char == '+') {
+    //         led_set(LED1, 1);
+    //     } else {
+    //         led_set(LED1, 0);
+    //     }
+    //     break; // Exit the loop once a character is received and processed
+    // }
 }

@@ -99,7 +99,7 @@ void drawAllParts(uint8_t partN, uint8_t round)
 {   
     ship_part_t part = parts[partN];
     tinygl_point_t point = {.x = part.col, .y = part.row};
-    if (part.hit) {
+    if (part.hit == true) {
         tinygl_draw_point(point, 0);
         if (round%5 == 0) {     // Making it flash by only showing every 5 times through all the parts. Use the same number for % must be prime.
             tinygl_draw_point(point, 1);
@@ -107,4 +107,22 @@ void drawAllParts(uint8_t partN, uint8_t round)
     } else {
         tinygl_draw_point(point, 1);
     }    
+}
+
+void display_ships (void) {
+    tinygl_clear();
+    uint8_t roundN = 0;
+    uint8_t partN = 0;
+    bool isFinished = false;
+    while (isFinished == false) {
+        pacer_wait ();
+        tinygl_update ();
+        button_update();
+        drawAllParts(partN, roundN);
+        roundN = (roundN+1)%5;
+        partN = (partN+1)%9;
+        if (button_push_event_p (0)) {
+            isFinished = true;
+        }
+    }
 }

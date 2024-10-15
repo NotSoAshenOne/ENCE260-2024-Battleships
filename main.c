@@ -43,15 +43,19 @@ int main(void)
     //     }
     // }
     placeShips();
-    //selectAttack();
-    uint8_t shipN = 0;
-    uint8_t partN = 0;
     while (1) {
-        pacer_wait ();
-        tinygl_update ();
-        drawAllParts(partN, shipN);
-        shipN = (shipN+1)%5;
-        partN = (partN+1)%9;
+        selectAttack();
+        display_ships();
     }
+
+    // uint8_t shipN = 0;
+    // uint8_t partN = 0;
+    // while (1) {
+    //     pacer_wait ();
+    //     tinygl_update ();
+    //     drawAllParts(partN, shipN);
+    //     shipN = (shipN+1)%5;
+    //     partN = (partN+1)%9;
+    // }
     return 0;
 }

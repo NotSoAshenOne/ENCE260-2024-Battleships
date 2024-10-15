@@ -48,7 +48,7 @@ bool check_part_hit(uint8_t x, uint8_t y, uint8_t* partNum)
 {
     for (size_t i = 0; i < MAX_SHIP_PARTS; i++) {
         if (parts[i].col == x && parts[i].row == y) {
-            parts[i].hit == true;
+            parts[i].hit = true;
             (*partNum) = i;
             return true;
         }
