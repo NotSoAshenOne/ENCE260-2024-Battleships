@@ -5,6 +5,9 @@
 #include "ir_uart.h"
 #include "tinygl.h"
 #include "pacer.h"
+#include "../fonts/font5x7_1.h"
+#include <stdio.h>
+
 
 tinygl_point_t startPosition;
 
@@ -70,7 +73,9 @@ void selectAttack()
         partN = (partN+1)%9;
     }
     attack_t attack = {.col = startPosition.x, .row = startPosition.y};
+    tinygl_draw_point(tinygl_point(attack.col, attack.row), 1);
     while(1) {
-        tinygl_draw_point(tinygl_point(attack.col, attack.row), 1);
+        tinygl_update();
+        pacer_wait();
     }
 }
