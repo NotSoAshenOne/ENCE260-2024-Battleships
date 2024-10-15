@@ -11,6 +11,7 @@ ship_t ships[MAX_SHIPS];
 ship_part_t parts[MAX_SHIP_PARTS];
 uint8_t ship_count = 0;
 
+
 //void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation);
 void update_ship(ship_t *ship, uint8_t row, uint8_t col);
 void rotate_ship(ship_t *ship);

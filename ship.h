@@ -26,6 +26,7 @@ typedef struct {
     uint8_t col;
     uint8_t length;
     orientation_t orientation;
+    bool sunk;
 } ship_t;
 
 extern ship_t ships[MAX_SHIPS];

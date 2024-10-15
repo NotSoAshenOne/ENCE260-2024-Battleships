@@ -48,7 +48,7 @@ void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientati
 
 void addShip(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation, uint8_t shipNum) 
 {
-    ship_t shipAdd = {.row = row, .col = col, .length = length, .orientation = orientation};
+    ship_t shipAdd = {.row = row, .col = col, .length = length, .orientation = orientation, .sunk = false};
     ships[shipNum] = shipAdd;    
 }
 

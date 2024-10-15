@@ -5,7 +5,7 @@
 #define HIT '+';
 #define MISS '-';
 
-#define remainingShips 5
+// #define remainingShips 3
 
 #include <stdint.h>
 #include "tinygl.h"
@@ -16,6 +16,8 @@ typedef struct {
     uint8_t row;
     uint8_t col;
 } attack_t;
+
+extern uint8_t remaining_ships;
 
 // tinygl_point_t navigation(void);
 void navigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t shipN, uint8_t partN);

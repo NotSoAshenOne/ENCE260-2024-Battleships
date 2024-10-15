@@ -23,7 +23,7 @@ setup.o: setup.c ship.h setup.h game.h ../../utils/tinygl.h ../../utils/pacer.h 
 attack.o: attack.c attack.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-defend.o: defend.c defend.h
+defend.o: defend.c defend.h ship.h game.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 winlose.o: winlose.c winlose.h
