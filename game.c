@@ -112,8 +112,14 @@ void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t le
         button_update ();
         if (button_push_event_p (0)) {
             if ((*orientation) == HORIZONTAL) {
+                if (selectPosition->y >(7-length)) {
+                    selectPosition->y = (7-length);
+                }
                 (*orientation) = VERTICAL;
             } else {
+                if (selectPosition->x > (5-length)) {
+                    selectPosition->x = (5-length);
+                }
                 (*orientation) = HORIZONTAL;
             }
         }

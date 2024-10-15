@@ -46,7 +46,7 @@ bool selectAttack(void) // Maybe want to pass through a pointer to a uint8_t par
     }
     attack_t attack = {.col = startPosition.x, .row = startPosition.y};
     uint8_t part_num;
-    return check_part_hit(attack.col, attack.row, &part_num); // Made a bool checking if the attack was successful
+    return check_part_hit(attack.col, attack.row, &part_num); // Made a bool checking if the attack was successful just while no multiplayer.
     // while (1) {
     //     tinygl_draw_point(tinygl_point(attack.col, attack.row), 1);
     // }
