@@ -12,172 +12,179 @@
 #include "button.h"
 #include <stdbool.h>
 
+// Initialise the game state to begin in the SETUP phase.
 game_state_t current_game_state = SETUP;
+// Initialise the number of ship parts for the player and the opponent.
 uint8_t player_parts = 9;
 uint8_t opponent_parts = 9;
 
+/*
+    The main game loop. Checks the current_game_state and then calls the respective phase method 
+    then changes to the next state.
+*/
 void game_loop(void)
 {
-    
     while (1)
     {
-        if (current_game_state == SETUP)
-        {
+        if (current_game_state == SETUP) {
             setup_phase();
-        }
-        else if (current_game_state == ATTACK)
-        {
+        } else if (current_game_state == ATTACK) {
             tinygl_clear();
             attack_phase();
             if (opponent_parts == 0) {
                 current_game_state = WINLOSE;
             }
-        }
-        else if (current_game_state == DEFEND)
-        {
+        } else if (current_game_state == DEFEND) {
             tinygl_clear();
             defend_phase();
             if (player_parts == 0) {
                 current_game_state = WINLOSE;
             }
-        }
-        else if (current_game_state == WINLOSE)
-        {
+        } else if (current_game_state == WINLOSE) {
             tinygl_clear();
             while (1) {
                 winlose_phase((opponent_parts == 0));    
             }
-            
         }
     }
 }
 
-void navigation(tinygl_point_t* selectPosition, bool* isSelected) 
+/*
+    Controls the cursor navigation and select by using the navswitch.
+    Displays the cursor.
+    Params:
+            select_position: the pointer to the position of the cursor.
+            is_selected: the pointer to the bool stating if the cursor position has been selected.
+*/
+void navigation(tinygl_point_t* select_position, bool* is_selected) 
 {
         tinygl_clear ();
         navswitch_update ();
-        button_update ();
-
         if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
-            if (selectPosition->y == 0) {
-                selectPosition->y = 6;
+            if (select_position->y == 0) {
+                select_position->y = 6;
             } else {
-                selectPosition->y += -1;
+                select_position->y += -1;
             }
-        }
-        else if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
-            if (selectPosition->y == 6) {
-                selectPosition->y = 0;
+        } else if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
+            if (select_position->y == 6) {
+                select_position->y = 0;
             } else {
-                selectPosition->y += 1;
+                select_position->y += 1;
             }
-        }
-        else if (navswitch_push_event_p (NAVSWITCH_EAST)) {
-            if (selectPosition->x == 4) {
-                selectPosition->x = 0;
+        } else if (navswitch_push_event_p (NAVSWITCH_EAST)) {
+            if (select_position->x == 4) {
+                select_position->x = 0;
             } else {
-                selectPosition->x += 1;
+                select_position->x += 1;
             }
-        }
-        else if (navswitch_push_event_p (NAVSWITCH_WEST)) {
-            if (selectPosition->x == 0) {
-                selectPosition->x = 4;
+        } else if (navswitch_push_event_p (NAVSWITCH_WEST)) {
+            if (select_position->x == 0) {
+                select_position->x = 4;
             } else {
-                selectPosition->x += -1;
+                select_position->x += -1;
             }
+        } else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
+            (*is_selected) = true;
         }
-        else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
-            (*isSelected) = true;
-        }
-
-        tinygl_draw_point((*selectPosition), 1);        
+        tinygl_draw_point((*select_position), 1);        
 }
 
-void shipNavigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t length, orientation_t* orientation, uint8_t shipN) 
+/*
+    Controls the navigation of the ships on the screen during the setup phase by using the navswitch, allows the movement and rotation of the ships.
+    Checks if the final part of the ship has reached the edge of the matrix screen and if it has then sends the other end of the ship to the other edge of the screen.
+    Then displays the ships that have previously been placed.
+    Params:
+            select_position: the pointer to the position of the cursor.
+            is_selected: the pointer to the bool stating if the cursor position has been selected.
+            length: the length of the ship to be navigated around the screen.
+            orientation: the pointer to the orientation of the ship displayed.
+            ship_num: the previously placed ship to be displayed on the matrix screen.            
+*/
+void ship_navigation(tinygl_point_t* select_position, bool* is_selected, uint8_t length, orientation_t* orientation, uint8_t ship_num) 
 {
-        /* TODO: Call the navswitch update function.  */
         tinygl_clear ();
         navswitch_update ();
         button_update ();
         if (button_push_event_p (0)) {
             if ((*orientation) == HORIZONTAL) {
-                if (selectPosition->y >(7-length)) {
-                    selectPosition->y = (7-length);
+                if (select_position->y >(ROWS-length)) { 
+                    select_position->y = (ROWS-length);
                 }
                 (*orientation) = VERTICAL;
             } else {
-                if (selectPosition->x > (5-length)) {
-                    selectPosition->x = (5-length);
+                if (select_position->x > (COLUMNS-length)) {
+                    select_position->x = (COLUMNS-length);
                 }
                 (*orientation) = HORIZONTAL;
             }
         }
         else if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
             if (*orientation == VERTICAL) {
-                if (selectPosition->y == 0) {
-                    selectPosition->y = (7-length);
+                if (select_position->y == 0) {
+                    select_position->y = (ROWS-length);
                 } else {
-                    selectPosition->y += -1;
+                    select_position->y += -1;
                 }
             } else {
-                if (selectPosition->y == 0) {
-                    selectPosition->y = 6;
+                if (select_position->y == 0) {
+                    select_position->y = 6;
                 } else {
-                    selectPosition->y += -1;
+                    select_position->y += -1;
                 }
             }
         } 
         else if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
             if (*orientation == VERTICAL) {
-                if (selectPosition->y == (7-length)) {
-                    selectPosition->y = 0;
+                if (select_position->y == (ROWS-length)) {
+                    select_position->y = 0;
                 } else {
-                    selectPosition->y += 1;
+                    select_position->y += 1;
                 }
             } else {
-                if (selectPosition->y == 6) {
-                    selectPosition->y = 0;
+                if (select_position->y == 6) {
+                    select_position->y = 0;
                 } else {
-                    selectPosition->y += 1;
+                    select_position->y += 1;
                 }
             }
         }
         else if (navswitch_push_event_p (NAVSWITCH_EAST)) {
             if (*orientation == HORIZONTAL) {
-                if (selectPosition->x == (5-length)) {
-                    selectPosition->x = 0;
+                if (select_position->x == (COLUMNS-length)) {
+                    select_position->x = 0;
                 } else {
-                    selectPosition->x += 1;
+                    select_position->x += 1;
                 }
             } else {
-                if (selectPosition->x == 4) {
-                selectPosition->x = 0;
+                if (select_position->x == 4) {
+                select_position->x = 0;
                 } else {
-                selectPosition->x += 1;
+                select_position->x += 1;
                 }
             }
         }
         else if (navswitch_push_event_p (NAVSWITCH_WEST)) {
             if (*orientation == HORIZONTAL) {
-                if (selectPosition->x == 0) {
-                    selectPosition->x = (5-length);
+                if (select_position->x == 0) {
+                    select_position->x = (COLUMNS-length);
                 } else {
-                    selectPosition->x += -1;
+                    select_position->x += -1;
                 }
             } else {
-                if (selectPosition->x == 0) {
-                selectPosition->x = 4;
+                if (select_position->x == 0) {
+                select_position->x = 4;
                 } else {
-                selectPosition->x += -1;
+                select_position->x += -1;
                 }
             }
         }
         else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
-            (*isSelected) = true;
+            (*is_selected) = true;
         }
-        draw_ship((selectPosition->y),(selectPosition->x), length, (*orientation));
-        if (shipN != 10) {
-            drawAllShips(shipN);
+        draw_ship((select_position->y),(select_position->x), length, (*orientation));
+        if (ship_num != 10) {
+            drawAllShips(ship_num);
         }
 }
 

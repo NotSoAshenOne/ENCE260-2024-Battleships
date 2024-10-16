@@ -94,7 +94,7 @@ void placeShips()
         while (isSelected == false) {
             pacer_wait ();
             tinygl_update ();
-            shipNavigation(&start_position, &isSelected, length, &ship_orientation, shipN);
+            ship_navigation(&start_position, &isSelected, length, &ship_orientation, shipN);
             if (i > 0) {
                 shipN = (shipN+1)%i;   
             }
