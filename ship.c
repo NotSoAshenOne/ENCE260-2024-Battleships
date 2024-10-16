@@ -134,21 +134,21 @@ void drawAllParts(uint8_t partN, uint8_t round)
 Shows the parts of the ships on the screen to the user, lasts while the button is not pressed.
 Uses drawAllParts function.
 */
-void display_ships (void) 
+void display_ships (uint8_t part_num, uint8_t round_num) 
 {
-    tinygl_clear();
-    uint8_t roundN = 0;
-    uint8_t partN = 0;
-    bool isFinished = false;
-    while (isFinished == false) {
+    // tinygl_clear();
+    // uint8_t roundN = 0;
+    // uint8_t partN = 0;
+    // bool isFinished = false;
+    // while (isFinished == false) {
         pacer_wait ();
         tinygl_update ();
         button_update();
-        drawAllParts(partN, roundN);
-        roundN = (roundN+1)%5;
-        partN = (partN+1)%9;
-        if (button_push_event_p (0)) {
-            isFinished = true;
-        }
-    }
+        drawAllParts(part_num, round_num);
+        // (*round_num) = ((*round_num)+1)%5;
+        // (*part_num) = ((*part_num)+1)%9;
+        // if (button_push_event_p (0)) {
+        //     isFinished = true;
+        // }
+    // }
 }

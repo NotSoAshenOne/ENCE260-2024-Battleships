@@ -33,3 +33,20 @@ void winlose_phase(bool win)
     }
     tinygl_update ();
 }
+
+void check_end() {
+    if 1
+    putc 'E';
+    while (!ready to receive) {
+        putc 'E'
+    }
+    get 
+
+    if 2
+    //put 'E'
+    while(not ready) {
+
+    }
+
+    
+}

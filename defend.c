@@ -18,20 +18,31 @@ void decode_coordinate(uint8_t* x, uint8_t* y, char encoded_char) {
 
 void defend_phase(void)
 {
-    tinygl_clear();
-
-    if (ir_uart_read_ready_p())
-    {
-        led_init();
-        data = ir_uart_getc();
-        decode_coordinate(&x, &y, data);
-        check_hit(x, y);
+    uint8_t roundN = 0;
+    uint8_t partN = 0;
+    // tinygl_clear();
+    while(1) {
+        if (ir_uart_read_ready_p())
+        {
+            led_init();
+            data = ir_uart_getc();
+            decode_coordinate(&x, &y, data);
+            check_hit(x, y);
+        }
+        // tinygl_point_t point = tinygl_point(x, y);
+        // Use point variable to avoid unused variable warning
+        // tinygl_draw_point(point, 1);
+        // tinygl_update();
+        led_set(LED1, 0);
+        // pacer_wait ();
+        // tinygl_update ();
+        // button_update();
+        // drawAllParts(partN, roundN);
+        display_ships(partN, roundN);
+        roundN = (roundN+1)%5;
+        partN = (partN+1)%9;
+        // display_ships();
     }
-    tinygl_point_t point = tinygl_point(x, y);
-    // Use point variable to avoid unused variable warning
-    tinygl_draw_point(point, 1);
-    tinygl_update();
-    led_set(LED1, 0);
 }
 
 void check_hit(uint8_t x, uint8_t y) {
