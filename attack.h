@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-bool attack_phase(void);
-bool selectAttack (void);
+void attack_phase(void);
+void selectAttack (void);
 
 #endif // ATTACK_H

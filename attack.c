@@ -12,7 +12,7 @@ tinygl_point_t startPosition;
 
 char received_char = ' ';
 
-bool attack_phase(void)
+void attack_phase(void)
 {
     selectAttack();
     current_game_state = DEFEND;
@@ -29,7 +29,7 @@ void send_coordinate(uint8_t x, uint8_t y)
     ir_uart_putc (ch);
 }
 
-bool selectAttack(void) // Maybe want to pass through a pointer to a uint8_t partNum instead of local partN
+void selectAttack(void) // Maybe want to pass through a pointer to a uint8_t partNum instead of local partN
 {
     // tinygl_point_t selectPosition = tinygl_point(2,3);
     startPosition = tinygl_point(2,3);
@@ -73,5 +73,5 @@ bool selectAttack(void) // Maybe want to pass through a pointer to a uint8_t par
         }
         break; // Exit the loop once a character is received and processed
     }
-    return true;
+    // return true;
 }
