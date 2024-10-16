@@ -17,6 +17,13 @@ typedef struct {
     uint8_t col;
 } attack_t;
 
+typedef enum {
+    SETUP,
+    ATTACK,
+    DEFEND,
+    WINLOSE
+} GameState;
+
 extern uint8_t remaining_ships;
 
 // tinygl_point_t navigation(void);

@@ -40,21 +40,6 @@ handshake(void) {
             break;
         }
     }
-    // Confirm the role assignment
-    if (is_device_1) {
-        tinygl_draw_char('1', tinygl_point(0, 0));
-        while (1) {
-            pacer_wait();
-            tinygl_update();
-        }
-    } else {
-        tinygl_draw_char('2', tinygl_point(0, 0));
-        while (1) {
-            pacer_wait();
-            tinygl_update();
-        }
-    }
-
     return is_device_1;
 }
 
@@ -62,7 +47,11 @@ handshake(void) {
 void setup_phase(void) {
     placeShips();
     is_device_1 = handshake();
-    // Use the is_device_1 variable as needed
+    if (is_device_1) {
+        GameState state = ATTACK;
+    } else {
+        GameState state = DEFEND;
+    }
 }
 
 void update_ship(ship_t *ship, uint8_t row, uint8_t col) {

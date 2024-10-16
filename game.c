@@ -12,14 +12,6 @@
 #include "button.h"
 #include <stdbool.h>
 
-
-typedef enum {
-    SETUP,
-    ATTACK,
-    DEFEND,
-    WINLOSE
-} GameState;
-
 void game_loop(void)
 {
     GameState state = SETUP;
@@ -37,7 +29,6 @@ void game_loop(void)
         else if (state == DEFEND)
         {
             defend_phase();
-            //display_ships();
         }
         else if (state == WINLOSE)
         {
