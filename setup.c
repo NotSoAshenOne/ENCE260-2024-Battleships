@@ -48,9 +48,9 @@ void setup_phase(void) {
     placeShips();
     is_device_1 = handshake();
     if (is_device_1) {
-        GameState state = ATTACK;
+        current_game_state = ATTACK;
     } else {
-        GameState state = DEFEND;
+        current_game_state = DEFEND;
     }
 }
 

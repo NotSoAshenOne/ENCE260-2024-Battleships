@@ -12,25 +12,26 @@
 #include "button.h"
 #include <stdbool.h>
 
+game_state_t current_game_state = SETUP;
+
 void game_loop(void)
 {
-    GameState state = SETUP;
     
     while (1)
     {
-        if (state == SETUP)
+        if (current_game_state == SETUP)
         {
             setup_phase();
         }
-        else if (state == ATTACK)
+        else if (current_game_state == ATTACK)
         {
             attack_phase();
         }
-        else if (state == DEFEND)
+        else if (current_game_state == DEFEND)
         {
             defend_phase();
         }
-        else if (state == WINLOSE)
+        else if (current_game_state == WINLOSE)
         {
             while (1) {
                 winlose_phase(true);    

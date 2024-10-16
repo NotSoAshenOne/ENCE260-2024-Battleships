@@ -22,9 +22,10 @@ typedef enum {
     ATTACK,
     DEFEND,
     WINLOSE
-} GameState;
+} game_state_t;
 
-extern uint8_t remaining_ships;
+extern game_state_t current_game_state;
+
 
 // tinygl_point_t navigation(void);
 void navigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t shipN, uint8_t partN);
