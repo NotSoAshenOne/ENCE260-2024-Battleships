@@ -6,48 +6,40 @@
 #include "game.h"
 #include "system.h"
 #include "setup.h"
+#include <stdlib.h>
+#include <avr/io.h>   
 
 ship_t ships[MAX_SHIPS];
 ship_part_t parts[MAX_SHIP_PARTS];
 uint8_t ship_count = 0;
-
+int count = 0;
+bool is_device_1 = false;
+char received = ' ';
 
 //void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation);
 void update_ship(ship_t *ship, uint8_t row, uint8_t col);
 void rotate_ship(ship_t *ship);
 
 #define HANDSHAKE_CHAR '*'
-#define TIMEOUT 1000 // Timeout value in milliseconds
+#define TIMEOUT 5000 // Timeout value in milliseconds
 
-bool handshake(void) {
-    char received_char = '\0';
-    bool is_device_1 = true;
-    int timeout_counter = 0;
 
+//Game Functionallity at start
+handshake(void) {
+    tinygl_clear();
     while (1) {
-        // Send handshake character
-        ir_uart_putc(HANDSHAKE_CHAR);
-
-        // Check if a character is received
-        if (ir_uart_read_ready_p()) {
-            received_char = ir_uart_getc();
-            if (received_char == HANDSHAKE_CHAR) {
-                is_device_1 = false; // This device becomes number 2
-                break;
-            }
-        }
-
-        // Increment the timeout counter
-        timeout_counter++;
-        if (timeout_counter > TIMEOUT) {
-            is_device_1 = true; // This device becomes number 1
+        button_update();
+        //When a player pushes the navswitch button, they are deemed the defender, and the other player is the attacker 
+        if (button_down_p(0)) {
+            led_set(LED1, 1);
+            ir_uart_putc(HANDSHAKE_CHAR);
+            is_device_1 = false;
+            break;
+        } else if (ir_uart_read_ready_p() && ir_uart_getc() == HANDSHAKE_CHAR) {
+            is_device_1 = true;
             break;
         }
-
-        // Small delay to avoid busy-waiting (adjust as needed)
-        pacer_wait();
     }
-
     // Confirm the role assignment
     if (is_device_1) {
         tinygl_draw_char('1', tinygl_point(0, 0));
@@ -66,10 +58,10 @@ bool handshake(void) {
     return is_device_1;
 }
 
+
 void setup_phase(void) {
-    char received_char = ' ';
     placeShips();
-    bool is_device_1 = handshake();
+    is_device_1 = handshake();
     // Use the is_device_1 variable as needed
 }
 

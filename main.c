@@ -13,8 +13,8 @@ int main(void)
     system_init();
     ir_uart_init ();
     button_init ();
-    tinygl_init (1000);
-    pacer_init (1000);
+    tinygl_init (500);
+    pacer_init (500);
     led_init();
     led_set(LED1, 0);
     tinygl_font_set (&font5x7_1);
