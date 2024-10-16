@@ -88,18 +88,18 @@ void placeShips()
     for (size_t i = 0; i < 3; i++) {
         isSelected = false; 
         ship_orientation = HORIZONTAL;
-        startPosition = tinygl_point(0,0);
+        start_position = tinygl_point(0,0);
         length = (i+2);
         uint8_t shipN = 10;
         while (isSelected == false) {
             pacer_wait ();
             tinygl_update ();
-            shipNavigation(&startPosition, &isSelected, length, &ship_orientation, shipN);
+            shipNavigation(&start_position, &isSelected, length, &ship_orientation, shipN);
             if (i > 0) {
                 shipN = (shipN+1)%i;   
             }
         }
-        addShip(startPosition.y, startPosition.x, length, ship_orientation, i);
+        addShip(start_position.y, start_position.x, length, ship_orientation, i);
         addShipPart(i);
     }
 }

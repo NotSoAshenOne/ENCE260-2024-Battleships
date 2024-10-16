@@ -4,6 +4,6 @@
 #include <stdbool.h>
 
 void attack_phase(void);
-void selectAttack (void);
+void select_attack (void);
 
 #endif // ATTACK_H
