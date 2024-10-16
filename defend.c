@@ -68,8 +68,8 @@ bool check_part_hit(uint8_t x, uint8_t y, uint8_t* partNum)
         if (parts[i].col == x && parts[i].row == y) {
             parts[i].hit = true;
             (*partNum) = i;
-            return true;
             player_parts--;
+            return true;
         }
     }
     return false;
