@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "ship.h"
+#include "game.h"
 
 uint8_t x = 0, y = 0;
 uint8_t data = 0; // Initialize data to avoid undeclared variable error
@@ -22,6 +23,7 @@ void defend_phase(void)
     uint8_t partN = 0;
     // tinygl_clear();
     while(1) {
+        button_update();
         if (ir_uart_read_ready_p())
         {
             led_init();
@@ -42,6 +44,11 @@ void defend_phase(void)
         roundN = (roundN+1)%5;
         partN = (partN+1)%9;
         // display_ships();
+        if (button_push_event_p (0)) {
+            //isFinished = true;
+            current_game_state = ATTACK;
+            break;
+        }
     }
 }
 
