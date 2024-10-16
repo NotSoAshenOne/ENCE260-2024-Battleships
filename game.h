@@ -25,6 +25,8 @@ typedef enum {
 } game_state_t;
 
 extern game_state_t current_game_state;
+extern uint8_t player_parts;
+extern uint8_t opponent_parts;
 
 
 // tinygl_point_t navigation(void);

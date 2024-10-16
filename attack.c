@@ -64,6 +64,9 @@ void selectAttack(void) // Maybe want to pass through a pointer to a uint8_t par
                 // Check if the received character is '-' or '+'
                 if (received_char == '-' || received_char == '+') {
                     led_set(LED1, 1);
+                    if (received_char == '+') {
+                        opponent_parts--;
+                    }
                     break; // Exit the loop if '-' or '+' is received
                 }
             }
