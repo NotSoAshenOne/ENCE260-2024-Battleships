@@ -3,6 +3,9 @@
 #include "pacer.h"
 #include "ship.h"
 #include "setup.h"
+#include "ir_uart.h"
+#include "button.h"
+#include "led.h"
 #include "../fonts/font3x5_1.h"
 #include "../fonts/font5x7_1.h"
 
@@ -21,38 +24,5 @@ int main(void)
 
     game_loop();
     
-    
-    // tinygl_point_t selectedPosition;
-    // tinygl_point_t startPosition = tinygl_point(2,3);
-    
-    // // navigation();
-    // system_init ();
-    // tinygl_init (1000);
-    // pacer_init(1000);
-    // while(1) {
-    //     pacer_wait ();
-    //     tinygl_update ();
-
-    //     if (!(*isSelected)){
-    //         selectedPosition = navigation(startPosition, isSelected);
-    //     } else {
-    //         draw_ship(selectedPosition.y, selectedPosition.x, 2, ship_orientation);
-    //     }
-    // }
-    // placeShips();
-    // while (1) {
-    //     selectAttack();
-    //     display_ships();
-    // }
-
-    // uint8_t shipN = 0;
-    // uint8_t partN = 0;
-    // while (1) {
-    //     pacer_wait ();
-    //     tinygl_update ();
-    //     drawAllParts(partN, shipN);
-    //     shipN = (shipN+1)%5;
-    //     partN = (partN+1)%9;
-    // }
     return 0;
 }

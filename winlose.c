@@ -16,7 +16,6 @@ void winlose_phase(bool win)
     } else {
         result = LOSE;
     }
-    //winlose_t result = LOSE; // Example initialization, change as needed
 
     if (result == WIN) {
         c = 'W';

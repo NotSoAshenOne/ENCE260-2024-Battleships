@@ -34,25 +34,14 @@ void selectAttack(void) // Maybe want to pass through a pointer to a uint8_t par
     // tinygl_point_t selectPosition = tinygl_point(2,3);
     startPosition = tinygl_point(2,3);
     bool isSelected = false; 
-    uint8_t shipN = 0;
-    uint8_t partN = 0;
     while (isSelected == false) {
         //draw_ship((startPosition.y), (startPosition.x), 4, (ship_orientation));
         pacer_wait ();
         tinygl_update ();
-        navigation(&startPosition, &isSelected, shipN, partN);
+        navigation(&startPosition, &isSelected);
         //drawAllParts(partN);
-        shipN = (shipN+1)%3;
-        partN = (partN+1)%9;
     }
     attack_t attack = {.col = startPosition.x, .row = startPosition.y};
-    // uint8_t part_num;
-    // return check_part_hit(attack.col, attack.row, &part_num); // Made a bool checking if the attack was successful just while no multiplayer.
-    // while (1) {
-    //     tinygl_draw_point(tinygl_point(attack.col, attack.row), 1);
-    // }
-    
-    
     while(1) {
         led_set(LED1, 0);
         // Broadcast the coordinate until a character is received
