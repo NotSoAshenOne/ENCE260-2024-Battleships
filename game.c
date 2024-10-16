@@ -27,6 +27,7 @@ void game_loop(void)
         }
         else if (current_game_state == ATTACK)
         {
+            tinygl_clear();
             attack_phase();
             if (opponent_parts == 0) {
                 current_game_state = WINLOSE;
@@ -34,6 +35,7 @@ void game_loop(void)
         }
         else if (current_game_state == DEFEND)
         {
+            tinygl_clear();
             defend_phase();
             if (player_parts == 0) {
                 current_game_state = WINLOSE;
@@ -41,6 +43,7 @@ void game_loop(void)
         }
         else if (current_game_state == WINLOSE)
         {
+            tinygl_clear();
             while (1) {
                 winlose_phase((opponent_parts == 0));    
             }
