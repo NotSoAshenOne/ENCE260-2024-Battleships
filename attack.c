@@ -14,7 +14,8 @@ char received_char = ' ';
 
 bool attack_phase(void)
 {
-    return selectAttack();
+    selectAttack();
+    current_game_state = DEFEND;
 }
 
 // Function to encode coordinates (x, y) into a single ASCII character
@@ -70,13 +71,7 @@ bool selectAttack(void) // Maybe want to pass through a pointer to a uint8_t par
             send_coordinate(attack.col, attack.row);
             pacer_wait();
         }
-        
-        // Is it a hit or a miss?
-        if (received_char == '+') {
-            led_set(LED1, 1);
-        } else {
-            led_set(LED1, 1);
-        }
         break; // Exit the loop once a character is received and processed
     }
+    return true;
 }
