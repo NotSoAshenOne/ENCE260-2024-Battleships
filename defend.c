@@ -8,7 +8,6 @@
 #include "game.h"
 
 uint8_t x = 0, y = 0;
-uint8_t data = 0; // Initialize data to avoid undeclared variable error
 uint8_t remaining_ships = 3;
 
 // Function to decode an ASCII character back into coordinates (x, y)
@@ -19,6 +18,7 @@ void decode_coordinate(uint8_t* x, uint8_t* y, char encoded_char) {
 
 void defend_phase(void)
 {
+    uint8_t data = 0;
     uint8_t roundN = 0;
     uint8_t partN = 0;
     // tinygl_clear();
@@ -44,7 +44,7 @@ void defend_phase(void)
         roundN = (roundN+1)%5;
         partN = (partN+1)%9;
         // display_ships();
-        if (button_push_event_p (0)) {
+        if (button_push_event_p (0) && data!=0) {
             //isFinished = true;
             current_game_state = ATTACK;
             break;
