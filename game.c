@@ -26,6 +26,7 @@
 #include "led.h"
 #include "tinygl.h"
 #include "pacer.h"
+#include "timer.h"
 #include "../fonts/font5x7_1.h"
 #include <stdbool.h>
 
@@ -51,6 +52,7 @@ int main(void)
     system_init();
     ir_uart_init ();
     button_init ();
+    timer_init ();
 
     pacer_init (PACER_RATE);
 
@@ -70,6 +72,9 @@ int main(void)
 */
 void game_loop(void)
 {
+    timer_tick_t now;
+    now = timer_get ();
+
     while (1)
     {
         if (current_game_state == SETUP) {
@@ -102,6 +107,8 @@ void game_loop(void)
             }
             winlose_phase(win);    
         }
+        
+        now = timer_wait_until (now + (timer_tick_t)(TIMER_RATE * 3));
     }
 }
 
