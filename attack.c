@@ -68,8 +68,9 @@ char received_char = ' ';
  * of attacks is less than the maximum allowed (MAX_ATTACKS). If the maximum
  * number of attacks has been reached, the function does nothing.
  *
- * @param row The row coordinate of the attack.
- * @param col The column coordinate of the attack.
+ * Params:
+ *      row: The row coordinate of the attack.
+ *      col: The column coordinate of the attack.
  */
 void add_attack_coordinate(int row, int col) {
     if (attack_count < MAX_ATTACKS) {
