@@ -67,6 +67,7 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
 {
     attack_type_t attack_type = AREA; // <- Change this to the attack type selected by the player
     start_position = tinygl_point(2,3);
+    // uint8_t round = 0;
     bool is_selected = false; 
     while (is_selected == false) {
         if (attack_type == SINGLE) {
@@ -84,6 +85,7 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
         for (size_t i = 0; i < opponent_parts_hit; i++) {
             tinygl_draw_point(tinygl_point(opponent_parts[i].col, opponent_parts[i].row), 1);
         }
+        // round = (round+1)%5;
     }
     attack_t attack = {.col = start_position.x, .row = start_position.y}; // <- Do we need this? Can't we just use start_position?
     // Broadcast the coordinate until a character is received

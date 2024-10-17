@@ -88,7 +88,7 @@ void navigation(tinygl_point_t* select_position, bool* is_selected)
             (*is_selected) = true;
         }
         tinygl_draw_point((*select_position), 1);
-        draw_hit_parts(part, round);        
+        //draw_hit_parts(part, round);        
 }
 
 /*
