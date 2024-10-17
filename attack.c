@@ -45,6 +45,7 @@ ship_part_t opponent_parts[MAX_SHIP_PARTS];
 */
 void attack_phase(void)
 {
+    led_set(LED1, 0);
     select_attack();
     current_game_state = DEFEND;
 }
@@ -84,7 +85,16 @@ void send_coordinate(uint8_t x, uint8_t y)
 void select_attack(void) // Maybe want to pass through a pointer to a uint8_t partNum instead of local partN
 {
     uint8_t ir_sends = 0;
-    attack_type_t attack_type = SINGLE; // <- Change this to the attack type selected by the player
+    
+    // Every 3rd turn use area, every 6th turn use torpedo
+    attack_type_t attack_type = SINGLE;
+
+    if (game_turn != 0 && game_turn % 3 == 0 && game_turn % 6 != 0) {
+        attack_type = AREA;
+    }else if (game_turn != 0 && game_turn % 6 == 0) {
+        attack_type = TORPEDO;
+    }
+
     start_position = tinygl_point(2,3);
     // uint8_t round = 0;
     bool is_selected = false; 
@@ -94,11 +104,9 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
         } else if (attack_type == AREA) {
             //Draw a 3x3 box around the start position
             tinygl_draw_box(tinygl_point(start_position.x - 1, start_position.y - 1), tinygl_point(start_position.x + 1, start_position.y + 1), 1);
-            ir_sends = 9;
         } else if (attack_type == TORPEDO) {
             //Take the start position, and on its column draw a line from top to bottom
             tinygl_draw_line(tinygl_point(start_position.x, 0), tinygl_point(start_position.x, 6), 1);
-            ir_sends = 7;
         }
         pacer_wait ();
         tinygl_update ();
@@ -147,5 +155,5 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
             }
         }
     }
-    // Send the coordinate if the received character is not '-' or '+'
+    attack_count = 0;
 }

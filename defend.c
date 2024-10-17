@@ -45,11 +45,11 @@ void defend_phase(void)
             decode_coordinate(&x, &y, data);
             check_hit(x, y);
         }
-        led_set(LED1, 0);
         display_ships(part, round);
         round = (round+1)%5;
         part = (part+1)%9;
         if (button_push_event_p (0) && data != 0) {
+            led_set(LED1, 1);
             current_game_state = ATTACK;
             break;
         }
