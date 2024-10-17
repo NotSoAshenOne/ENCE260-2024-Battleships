@@ -1,7 +1,23 @@
+/**
+ * @file setup.c
+ * @authors Morgan Lee (mle150) and Kaden Adlington (kad112)
+ * @brief This file contains the implementation of the setup phase in the game.
+ * 
+ * Handles the initialisation of players, assigning player 1 and player 2. Also handles the placement of player ships on the board.
+ * 
+ * The main functions include:
+ * - handshake(): Initialises the game by assigning player 1 and player 2.
+ * - setup_phase(): Runs the main setup phase within the game.
+ * - place_ships(): Allows the player to place three ships, of length 2, 3, and 4, on the board, also gives the ability to rotate the ships.
+ * 
+ * @note The file includes necessary headers and initialises global constants used within the setup phase of the game.
+ */
+
+// Game Modules
 #include "ship.h"
 #include "game.h"
 #include "setup.h"
-
+// Funkit Drivers
 #include "system.h"
 #include "ir_uart.h"
 #include "tinygl.h"
@@ -11,7 +27,6 @@
 
 ship_t ships[MAX_SHIPS];
 ship_part_t parts[MAX_SHIP_PARTS];
-ship_part_t oppenent_parts[MAX_SHIP_PARTS];
 uint8_t ship_count = 0;
 int count = 0;
 bool is_device_1 = false;
@@ -53,7 +68,7 @@ bool handshake(void)
 */
 void setup_phase(bool* is_player1) 
 {
-    placeShips();
+    place_ships();
     is_device_1 = handshake();
     if (is_device_1) {
         current_game_state = ATTACK;
@@ -67,7 +82,7 @@ void setup_phase(bool* is_player1)
     Controls the placement of player ships. Loops through the ships and calls shipNavigation for each one.
     Once each is placed then it will add the ship to ships[] and then add the ship parts to the parts[] array.
 */
-void placeShips() 
+void place_ships() 
 {
     bool isSelected;
     orientation_t ship_orientation;

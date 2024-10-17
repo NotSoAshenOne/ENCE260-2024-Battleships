@@ -1,5 +1,6 @@
 /**
  * @file attack.c
+ * @authors Morgan Lee (mle150) and Kaden Adlington (kad112)
  * @brief This file contains the implementation of the attack phase in the game.
  * 
  * The attack phase includes functions for encoding and sending attack coordinates,
@@ -18,6 +19,7 @@
  * @note The file includes necessary headers and defines constants and global variables 
  * used in the attack phase.
  */
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdbool.h>

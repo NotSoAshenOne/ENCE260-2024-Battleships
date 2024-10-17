@@ -1,10 +1,24 @@
+/**
+ * @file game.c
+ * @authors Morgan Lee (mle150) and Kaden Adlington (kad112)
+ * @brief This file contains the implementation of the main game loop.
+ * 
+ * Loops through the main phases of the game, the setup phase, attacking phase, defending phase, and the win / lose phase.
+ * 
+ * The main functions include:
+ * - game_loop(): The main game loop. 
+ * 
+ * @note The file includes necessary headers and initialises global constants used within the game loop.
+ */
+
+// Game Modules
 #include "game.h"
 #include "ship.h"
 #include "setup.h"
 #include "attack.h"
 #include "defend.h"
 #include "winlose.h"
-
+// Funkit Drivers
 #include "system.h"
 #include "tinygl.h"
 #include <stdbool.h>

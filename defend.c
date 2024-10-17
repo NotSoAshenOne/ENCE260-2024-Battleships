@@ -1,3 +1,21 @@
+/**
+ * @file defend.c
+ * @authors Morgan Lee (mle150) and Kaden Adlington (kad112)
+ * @brief This file contains the implementation of the defending phase in the game.
+ * 
+ * The defend phase includes functions for decoding and receiving attack coordinates,
+ * as well as displaying the current state of the player's fleet.
+ * 
+ * The main functions include:
+ * - decode_coordinate(): Decodes a single ASCII character into (x,y) co-ordinates.
+ * - defend_phase(): Runs the main defending phase within the game loop.
+ * - check_hit(): Transmits a '+' if a ship part was hit by the received attack and '-' if not.
+ * - check_part_hit(): Loops through all the player's ship parts to see if the received co-ordinates match with any of the ship parts.
+ * 
+ * 
+ * @note The file includes necessary headers used in the defend phase.
+ */
+
 #include <stdint.h>
 #include <stdbool.h>
 // Game modules
