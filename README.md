@@ -1,4 +1,5 @@
-# Battleships Game on UC FunKit4
+# BATTLESHIPS
+## ENCE260 Assignment 2 by Morgan Lee (mle150) and Kaden Adlington (kad112)
 
 This is a simple adaptation of the popular board game **Battleships** for the UC FunKit4. In addition to the traditional gameplay, this version introduces new attack options.
 
