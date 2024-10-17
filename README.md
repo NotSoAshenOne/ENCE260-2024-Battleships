@@ -45,3 +45,15 @@ In addition to normal attacks, every few turns, the attacker will gain access to
 
 2. **Torpedo Attack (Every 6th turn)**
    - This attack hits an entire column, regardless of what's in it.
+
+
+## Running the project
+To run this project:
+1. First clone the ence260-ucfk4 repository created by **Michael P. Hayes** and **Richard Clare** by using the command `git clone https://eng-git.canterbury.ac.nz/rmc84/ence260-ucfk4.git`  
+2. Then navigate to the assignments folder using `cd assignment`  
+3. Then clone this repository by using `git clone https://eng-git.canterbury.ac.nz/ence260-2024/group_317.git`
+4. Then navigate into the cloned repository with `cd group_317` and run `make program` to compile the project onto your UC FunKit4.
+
+## Credits
+
+This project makes use of drivers and utilities written for the UCFK4 by **Michael P. Hayes** of the UC ECE department.
