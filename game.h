@@ -23,8 +23,8 @@ typedef enum {
 } game_state_t;
 
 extern game_state_t current_game_state;
-extern uint8_t player_parts;
-extern uint8_t opponent_parts;
+extern uint8_t player_parts_hit;
+extern uint8_t opponent_parts_hit;
 
 void game_loop(void);
 void navigation(tinygl_point_t* selectPosition, bool* isSelected);

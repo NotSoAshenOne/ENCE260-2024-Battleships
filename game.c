@@ -15,8 +15,8 @@
 // Initialise the game state to begin in the SETUP phase.
 game_state_t current_game_state = SETUP;
 // Initialise the number of ship parts for the player and the opponent.
-uint8_t player_parts = 9;
-uint8_t opponent_parts = 9;
+uint8_t player_parts_hit = 0;
+uint8_t opponent_parts_hit = 0;
 
 /*
     The main game loop. Checks the current_game_state and then calls the respective phase method 
@@ -31,19 +31,19 @@ void game_loop(void)
         } else if (current_game_state == ATTACK) {
             tinygl_clear();
             attack_phase();
-            if (opponent_parts == 0) {
+            if (opponent_parts_hit == MAX_SHIP_PARTS) {
                 current_game_state = WINLOSE;
             }
         } else if (current_game_state == DEFEND) {
             tinygl_clear();
             defend_phase();
-            if (player_parts == 0) {
+            if (player_parts_hit == MAX_SHIP_PARTS) {
                 current_game_state = WINLOSE;
             }
         } else if (current_game_state == WINLOSE) {
             tinygl_clear();
             while (1) {
-                winlose_phase((opponent_parts == 0));    
+                winlose_phase((opponent_parts == MAX_SHIP_PARTS));    
             }
         }
     }
@@ -87,7 +87,8 @@ void navigation(tinygl_point_t* select_position, bool* is_selected)
         } else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
             (*is_selected) = true;
         }
-        tinygl_draw_point((*select_position), 1);        
+        tinygl_draw_point((*select_position), 1);
+        draw_hit_parts(part, round);        
 }
 
 /*

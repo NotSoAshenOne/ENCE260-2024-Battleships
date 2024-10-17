@@ -19,6 +19,8 @@ tinygl_point_t start_position;
 // Initialise the received char for IR interaction.
 char received_char = ' ';
 
+ship_part_t opponent_parts[MAX_SHIP_PARTS];
+
 /*
     Runs the main attacking phase within the game loop.
     Calls the select_attack() method and then changes the game state to the next defending phase.
@@ -79,7 +81,9 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
         pacer_wait ();
         tinygl_update ();
         navigation(&start_position, &is_selected);
-        //drawAllParts(partN);
+        for (size_t i = 0; i < opponent_parts_hit; i++) {
+            tinygl_draw_point(tinygl_point(opponent_parts[i].col, opponent_parts[i].row), 1);
+        }
     }
     attack_t attack = {.col = start_position.x, .row = start_position.y}; // <- Do we need this? Can't we just use start_position?
     // Broadcast the coordinate until a character is received
@@ -92,16 +96,14 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
             received_char = ir_uart_getc(); 
             // Check if the received character is '-' or '+'
             if (received_char == '-' || received_char == '+') {
-                tinygl_draw_char(received_char,tinygl_point (0, 0));
-                while (1) {
-                    tinygl_update();
-                    pacer_wait();
-                }
                 if (received_char == '+') {
                     led_set(LED1, 1);
-                    opponent_parts--;
+                    opponent_parts[opponent_parts_hit] = (ship_part_t){attack.row, attack.col, true};
+                    opponent_parts_hit++;
                 }
+                break;
             }
+            
         }
     }
     // Send the coordinate if the received character is not '-' or '+'

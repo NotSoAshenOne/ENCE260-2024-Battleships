@@ -12,6 +12,7 @@ uint8_t x = 0, y = 0;
 // Initialise the number of ships that have not been sunk.
 uint8_t remaining_ships = 3;
 
+
 /*
     Function to decode an ASCII character back into coordinates (x, y)
     Params:
@@ -91,7 +92,7 @@ bool check_part_hit(uint8_t x, uint8_t y, uint8_t* part)
         if (parts[i].col == x && parts[i].row == y) {
             parts[i].hit = true;
             (*part) = i;
-            player_parts--;
+            player_parts_hit++;
             return true;
         }
     }
@@ -117,7 +118,6 @@ bool check_ship_sunk(uint8_t* part_num)
     } else if ((*part_num) >= 2 && (*part_num) < 5) {
         if (parts[2].hit == true && parts[3].hit == true && parts[4].hit == true) {
             ships[1].sunk = true;
-#include <stdbool.h>;
             remaining_ships += -1;
             return true;
         }

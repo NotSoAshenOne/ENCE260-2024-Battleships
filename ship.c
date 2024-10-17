@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 /*
-Initialisation of variables
+    Initialisation of variables
 */
 uint8_t ship_positions[ROWS][COLUMNS] = {0};
 orientation_t ship_orientation = HORIZONTAL;
@@ -130,6 +130,18 @@ void drawAllParts(uint8_t partN, uint8_t round)
     }    
 }
 
+void draw_hit_parts(uint8_t part_num, uint8_t round)
+{
+    ship_part_t part = opponent_parts[part_num];
+    tinygl_point_t point = {.x = part.col, .y = part.row};
+    if (part.hit == true) {
+        tinygl_draw_point(point, 0);
+        if (round%5 == 0) {     // Making it flash by only showing every 5 times through all the parts. Use the same number for % must be prime.
+            tinygl_draw_point(point, 1);
+        }   
+    }
+}
+
 /*
 Shows the parts of the ships on the screen to the user, lasts while the button is not pressed.
 Uses drawAllParts function.
@@ -152,3 +164,4 @@ void display_ships (uint8_t part_num, uint8_t round_num)
         // }
     // }
 }
+

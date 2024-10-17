@@ -40,5 +40,6 @@ void addShipPart(uint8_t shipNum);
 void drawAllParts(uint8_t partN, uint8_t round);
 void drawAllShips(uint8_t shipN);
 void display_ships(uint8_t part_num, uint8_t round_num);
+void draw_hit_parts(uint8_t part_num, uint8_t round_num);
 
 #endif // SHIP_H
