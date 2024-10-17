@@ -66,7 +66,7 @@ void defend_phase(void)
         }
         // display_ships(part, round);
         draw_part(part, round);
-        round = (round+1)%5;
+        round = (round+1)%WHILE_LOOPS;
         part = (part+1)%MAX_SHIP_PARTS;
         if (button_push_event_p (0) && data != 0) {
             led_set(LED1, 1);

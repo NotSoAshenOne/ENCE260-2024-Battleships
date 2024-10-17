@@ -156,7 +156,7 @@ void draw_part(uint8_t part_num, uint8_t round)
     tinygl_point_t point = {.x = part.col, .y = part.row};
     if (part.hit == true) {
         tinygl_draw_point(point, 0);
-        if (round%5 == 0) {     // Making it flash by only showing every 5 times through all the parts. Use the same number for % must be prime.
+        if (round%WHILE_LOOPS == 0) {     // Making it flash by only showing every 5 times through all the parts. Use the same number for % must be prime.
             tinygl_draw_point(point, 1);
         }
     } else {
@@ -225,7 +225,7 @@ void ship_navigation(tinygl_point_t* select_position, bool* is_selected, uint8_t
                 }
             } else {
                 if (select_position->y == 0) {
-                    select_position->y = 6;
+                    select_position->y = (ROWS - 1);
                 } else {
                     select_position->y += -1;
                 }
@@ -239,7 +239,7 @@ void ship_navigation(tinygl_point_t* select_position, bool* is_selected, uint8_t
                     select_position->y += 1;
                 }
             } else {
-                if (select_position->y == 6) {
+                if (select_position->y == (ROWS - 1)) {
                     select_position->y = 0;
                 } else {
                     select_position->y += 1;
@@ -254,7 +254,7 @@ void ship_navigation(tinygl_point_t* select_position, bool* is_selected, uint8_t
                     select_position->x += 1;
                 }
             } else {
-                if (select_position->x == 4) {
+                if (select_position->x == (COLUMNS - 1)) {
                 select_position->x = 0;
                 } else {
                 select_position->x += 1;
@@ -264,13 +264,13 @@ void ship_navigation(tinygl_point_t* select_position, bool* is_selected, uint8_t
         else if (navswitch_push_event_p (NAVSWITCH_WEST)) {
             if (*orientation == HORIZONTAL) {
                 if (select_position->x == 0) {
-                    select_position->x = (COLUMNS-length);
+                    select_position->x = (COLUMNS - length);
                 } else {
                     select_position->x += -1;
                 }
             } else {
                 if (select_position->x == 0) {
-                select_position->x = 4;
+                select_position->x = (COLUMNS - 1);
                 } else {
                 select_position->x += -1;
                 }

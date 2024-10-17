@@ -13,6 +13,7 @@
 #define SHIP_ONE_LENGTH 2
 #define SHIP_TWO_LENGTH 3
 #define SHIP_THREE_LENGTH 4
+#define WHILE_LOOPS 5
 
 typedef enum {
     HORIZONTAL,
