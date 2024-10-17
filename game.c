@@ -17,6 +17,8 @@ game_state_t current_game_state = SETUP;
 // Initialise the number of ship parts for the player and the opponent.
 uint8_t player_parts_hit = 0;
 uint8_t opponent_parts_hit = 0;
+uint8_t game_turn = 0;
+bool is_player1;
 
 /*
     The main game loop. Checks the current_game_state and then calls the respective phase method 
@@ -34,16 +36,28 @@ void game_loop(void)
             if (opponent_parts_hit == MAX_SHIP_PARTS) {
                 current_game_state = WINLOSE;
             }
+            if(!is_player1) {
+                game_turn++;
+            }
         } else if (current_game_state == DEFEND) {
             tinygl_clear();
             defend_phase();
             if (player_parts_hit == MAX_SHIP_PARTS) {
                 current_game_state = WINLOSE;
             }
+            if (is_player1) {
+                game_turn++;
+            }
         } else if (current_game_state == WINLOSE) {
             tinygl_clear();
+            bool win;
+            if (opponent_parts_hit == MAX_SHIP_PARTS) {
+                win = true;
+            } else {
+                win = false;
+            }
             while (1) {
-                winlose_phase((opponent_parts == MAX_SHIP_PARTS));    
+                winlose_phase(win);    
             }
         }
     }

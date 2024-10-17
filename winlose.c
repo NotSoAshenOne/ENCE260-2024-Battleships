@@ -10,18 +10,20 @@ typedef enum {
 void winlose_phase(bool win)
 {
     char c = ' ';
-    winlose_t result;
+    // winlose_t result;
     if (win){
-        result = WIN;
+        // result = WIN;
+        c = 'W'
     } else {
-        result = LOSE;
+        // result = LOSE;
+        c = 'L'
     }
 
-    if (result == WIN) {
-        c = 'W';
-    } else if (result == LOSE) {
-        c = 'L';
-    }
+    // if (result == WIN) {
+    //     c = 'W';
+    // } else if (result == LOSE) {
+    //     c = 'L';
+    // }
 
     if (c == 'W') {
         tinygl_draw_char('W',tinygl_point (0, 0));

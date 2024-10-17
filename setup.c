@@ -48,8 +48,10 @@ bool handshake(void)
 /*
     Runs the main setup phase for the game, allows the player to place their ships then initialise the game.
     If the player is player1 then they will go to the attack phase otherwise the player will go to the defend phase.
+    Params:
+            is_player1: the pointer to the value denoting whether the player is player1 or not.
 */
-void setup_phase(void) 
+void setup_phase(bool* is_player1) 
 {
     placeShips();
     is_device_1 = handshake();
@@ -58,6 +60,7 @@ void setup_phase(void)
     } else {
         current_game_state = DEFEND;
     }
+    (*is_player1) = is_device_1;
 }
 
 /*
