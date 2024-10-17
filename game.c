@@ -20,7 +20,12 @@
 #include "winlose.h"
 // Funkit Drivers
 #include "system.h"
+#include "ir_uart.h"
+#include "button.h"
+#include "led.h"
 #include "tinygl.h"
+#include "pacer.h"
+#include "../fonts/font5x7_1.h"
 #include <stdbool.h>
 
 // Initialise the game state to begin in the SETUP phase and the game_turn.
@@ -30,6 +35,26 @@ bool is_player1;
 // Initialise the number of ship parts hit for the player and the opponent.
 uint8_t player_parts_hit = 0;
 uint8_t opponent_parts_hit = 0;
+
+#define PACER_RATE 500
+#define TINYGL_RATE 500
+
+int main(void)
+{
+    system_init();
+    ir_uart_init ();
+    button_init ();
+
+    pacer_init (PACER_RATE);
+
+    tinygl_init (TINYGL_RATE);
+    tinygl_font_set (&font5x7_1);
+
+    led_init();
+    led_set(LED1, 0);
+
+    game_loop();
+}
 
 
 /*

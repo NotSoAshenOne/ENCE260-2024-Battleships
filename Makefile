@@ -9,9 +9,6 @@ DEL = rm
 all: game.out
 
 # Compile: create object files from C source files.
-main.o: main.c game.h ../../drivers/avr/system.h ../../utils/pacer.h ../../utils/font.h ../../drivers/led.h ../../drivers/button.h ../../drivers/avr/ir_uart.h ../../utils/tinygl.h
-	$(CC) -c $(CFLAGS) $< -o $@
-
 game.o: game.c setup.h attack.h defend.h winlose.h ship.h ../../drivers/avr/system.h ../../utils/tinygl.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
@@ -79,7 +76,7 @@ usart1.o: ../../drivers/avr/usart1.c ../../drivers/avr/system.h ../../drivers/av
 
 
 # Link: create ELF output file from object files.
-game.out: main.o game.o ship.o setup.o attack.o defend.o winlose.o pio.o system.o led.o timer.o display.o ledmat.o navswitch.o font.o pacer.o tinygl.o ir_uart.o prescale.o usart1.o timer0.o timer.o button.o
+game.out: game.o ship.o setup.o attack.o defend.o winlose.o pio.o system.o led.o timer.o display.o ledmat.o navswitch.o font.o pacer.o tinygl.o ir_uart.o prescale.o usart1.o timer0.o timer.o button.o
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(SIZE) $@
 
