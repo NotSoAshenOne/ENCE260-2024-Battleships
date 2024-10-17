@@ -17,7 +17,7 @@ game_state_t current_game_state = SETUP;
 // Initialise the number of ship parts for the player and the opponent.
 uint8_t player_parts_hit = 0;
 uint8_t opponent_parts_hit = 0;
-uint8_t game_turn = 0;
+uint8_t game_turn = 1;
 bool is_player1;
 
 /*
