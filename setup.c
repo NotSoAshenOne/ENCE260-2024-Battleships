@@ -27,7 +27,6 @@
 
 ship_t ships[MAX_SHIPS];
 ship_part_t parts[MAX_SHIP_PARTS];
-uint8_t ship_count = 0;
 int count = 0;
 bool is_device_1 = false;
 char received = ' ';

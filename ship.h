@@ -35,7 +35,6 @@ typedef struct {
 
 extern ship_t ships[MAX_SHIPS];
 extern ship_part_t parts[MAX_SHIP_PARTS];
-extern uint8_t ship_count;
 extern ship_part_t opponent_parts[MAX_SHIP_PARTS];
 
 void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation);
