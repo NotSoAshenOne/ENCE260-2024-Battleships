@@ -6,6 +6,7 @@
  * Loops through the main phases of the game, the setup phase, attacking phase, defending phase, and the win / lose phase.
  * 
  * The main functions include:
+ * - main(): The main function that initialises the game loop.
  * - game_loop(): The main game loop. 
  * 
  * @note The file includes necessary headers and initialises global constants used within the game loop.
@@ -32,13 +33,19 @@
 game_state_t current_game_state = SETUP;
 uint8_t game_turn = 1;
 bool is_player1;
+
 // Initialise the number of ship parts hit for the player and the opponent.
 uint8_t player_parts_hit = 0;
 uint8_t opponent_parts_hit = 0;
 
+// Initialize the PACER and TINYGL rates.
 #define PACER_RATE 500
 #define TINYGL_RATE 500
 
+/*
+ * This file contains the main function which initializes the system,
+ * sets up the necessary peripherals, and starts the game loop.
+*/
 int main(void)
 {
     system_init();
