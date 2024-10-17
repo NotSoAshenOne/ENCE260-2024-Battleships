@@ -29,6 +29,7 @@ char received = ' ';
 bool handshake(void) 
 {
     tinygl_clear();
+    tinygl_update();
     while (1) {
         button_update();
         if (button_down_p(0)) {

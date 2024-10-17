@@ -1,11 +1,23 @@
-/** 
-    File Name: attack.c
-    Authors: Morgan Lee (mle150) and Kaden Adlington (kad112)
-    Date: 12/10/2024
-    Function: Contains all the functions and capabilites for attacking and sending that attack to the opposite UCFK4.
-
-*/
-
+/**
+ * @file attack.c
+ * @brief This file contains the implementation of the attack phase in the game.
+ * 
+ * The attack phase includes functions for encoding and sending attack coordinates,
+ * as well as handling different types of attacks (SINGLE, AREA, TORPEDO).
+ * 
+ * The main functions include:
+ * - add_attack_coordinate(): Adds an attack coordinate to the list of attack coordinates.
+ * - attack_phase(): Runs the main attacking phase within the game loop.
+ * - encode_coordinate(): Encodes (x, y) coordinates into a single ASCII character.
+ * - send_coordinate(): Encodes and transmits (x, y) coordinates using the IR transmitter.
+ * - send_attack(): Displays a pointer on the screen, allows the player to select a point, 
+ *   and transmits the selected attack coordinates.
+ * 
+ * The file also defines the attack_type_t enum and the Coordinate struct.
+ * 
+ * @note The file includes necessary headers and defines constants and global variables 
+ * used in the attack phase.
+ */
 #include <stdint.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -42,32 +54,38 @@ typedef struct {
 // Initialise the arrays for attacking and storing the successful hits.
 Coordinate attack_coordinates[MAX_ATTACKS];
 ship_part_t opponent_parts[MAX_SHIP_PARTS];
+int attack_count = 0;
 // Initialise the starting position.
 tinygl_point_t start_position;
 // Initialise the received char for IR interaction and the attack counter.
 char received_char = ' ';
-int attack_count = 0;
 
-/*
-    Runs the main attacking phase within the game loop.
-    Calls the select_attack() method and then changes the game state to the next defending phase.
-*/
-void attack_phase(void)
-{
-    led_set(LED1, 0);
-    select_attack();
-    current_game_state = DEFEND;
-}
-
-/*
-    Adds the (column,row) co-ordinate pair to the attack_coordinates[] array for multi-hit attacks.
-*/
+/**
+ * This function adds a new attack coordinate specified by the row and column
+ * parameters to the attack_coordinates array, provided that the current number
+ * of attacks is less than the maximum allowed (MAX_ATTACKS). If the maximum
+ * number of attacks has been reached, the function does nothing.
+ *
+ * @param row The row coordinate of the attack.
+ * @param col The column coordinate of the attack.
+ */
 void add_attack_coordinate(int row, int col) {
     if (attack_count < MAX_ATTACKS) {
         attack_coordinates[attack_count].row = row;
         attack_coordinates[attack_count].col = col;
         attack_count++;
     }
+}
+
+/*
+    Runs the main attacking phase within the game loop.
+    Calls the send_attack() method and then changes the game state to the next defending phase.
+*/
+void attack_phase(void)
+{
+    led_set(LED1, 0);
+    send_attack();
+    current_game_state = DEFEND;
 }
 
 /*
@@ -104,7 +122,7 @@ void send_coordinate(uint8_t x, uint8_t y)
     character is then checked and if it is '-' or '+' then the IR transmission is ended.
     If the attack hits an opponent ship then the opponent_parts[] array and opponent_parts_hit counter are updated.
 */
-void select_attack(void) // Maybe want to pass through a pointer to a uint8_t partNum instead of local partN
+void send_attack(void)
 {
     uint8_t ir_sends = 0;
     attack_type_t attack_type = SINGLE;
@@ -113,6 +131,7 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
     }else if (game_turn != 0 && game_turn % 6 == 0) {
         attack_type = TORPEDO;
     }
+
     start_position = tinygl_point(2,3);
     bool is_selected = false; 
     while (is_selected == false) {
@@ -128,6 +147,7 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
         navigation(&start_position, &is_selected);
         draw_hit_parts();
     }
+
     if (attack_type == SINGLE) {
         add_attack_coordinate(start_position.y, start_position.x);
         ir_sends = 1;
@@ -144,8 +164,8 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
             ir_sends++;
         }
     }
-    int i = 0;
-    while (i < ir_sends) {
+
+    for (uint8_t i = 0; i < ir_sends; i++) {
         send_coordinate(attack_coordinates[i].col, attack_coordinates[i].row);
         while (1) {
             if (ir_uart_read_ready_p()) {
@@ -155,7 +175,6 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
                         opponent_parts[opponent_parts_hit] = (ship_part_t){attack_coordinates[i].row, attack_coordinates[i].col, true};
                         opponent_parts_hit++;
                     }
-                    i++;
                     break;
                 }
                 

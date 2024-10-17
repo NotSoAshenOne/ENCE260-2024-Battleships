@@ -6,11 +6,8 @@
 #include "led.h"
 #include "tinygl.h"
 #include "pacer.h"
-#include "../fonts/font3x5_1.h"
 #include "../fonts/font5x7_1.h"
 #include "system.h"
-
-
 
 int main(void)
 {
