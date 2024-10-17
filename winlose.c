@@ -1,4 +1,19 @@
+/**
+ * @file winlose.c
+ * @authors Morgan Lee (mle150) and Kaden Adlington (kad112)
+ * @brief This file contains the implementation for the win / lose phase within the game loop.
+ * 
+ * Handles the display of 'W' for a win and 'L' for a loss.
+ * 
+ * The main functions include:
+ * - winlose_phase(): Runs the main loop for the win / lose phase of the game. Checks for a win or loss then displays 'W' or 'L'.
+ * 
+ * @note The file includes necessary headers for the win / lose phase of the game.
+ */
+
+// Game Modules
 #include "winlose.h"
+// Funkit Drivers
 #include "tinygl.h"
 
 /*

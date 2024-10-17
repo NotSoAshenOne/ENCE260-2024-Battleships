@@ -1,6 +1,27 @@
+/**
+ * @file ship.c
+ * @authors Morgan Lee (mle150) and Kaden Adlington (kad112)
+ * @brief This file contains the implementation for the ships in the game.
+ * 
+ * Controls the functionality of the ships. Handles the display and creation of the ships.
+ * 
+ * The main functions include:
+ * - draw_ship(): Draws a single ship on the LED matrix from a given ship origin point.
+ * - add_ship(): Adds a ship to the ships[] array.
+ * - add_ship_part(): Adds a ship part to the player's parts[] array.
+ * - draw_all_ships(): Draws all of the ships in the ship[] array using the draw_ship() function.
+ * - draw_part(): Draws a single ship part from the parts[] array, making the part flash if it is hit.
+ * - draw_hit_parts(): Draws the opponents parts that the player has hit.
+ * - display_ships(): Draws the player's ships by drawing all the ship parts in the player's parts[] array. 
+ * - ship_navigation(): Allows the player to move a ship around the screen to then place.
+ * 
+ * @note The file includes necessary headers and initialises global constants used for the ships in the game.
+ */
+
+// Game Modules
 #include "ship.h"
 #include "game.h"
-
+// Funkit Drivers
 #include "system.h"
 #include "tinygl.h"
 #include "navswitch.h"
