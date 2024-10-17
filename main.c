@@ -9,18 +9,22 @@
 #include "../fonts/font5x7_1.h"
 #include "system.h"
 
+#define PACER_RATE 500
+#define TINYGL_RATE 500
+
 int main(void)
 {
     system_init();
     ir_uart_init ();
     button_init ();
-    tinygl_init (500);
-    pacer_init (500);
-    led_init();
-    led_set(LED1, 0);
+
+    pacer_init (PACER_RATE);
+
+    tinygl_init (TINYGL_RATE);
     tinygl_font_set (&font5x7_1);
 
+    led_init();
+    led_set(LED1, 0);
+
     game_loop();
-    
-    return 0;
 }
