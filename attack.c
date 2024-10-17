@@ -8,6 +8,12 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+typedef enum {
+    SINGLE,
+    AREA,
+    TORPEDO
+} attack_type_t;
+
 // Initialise the starting position.
 tinygl_point_t start_position;
 // Initialise the received char for IR interaction.
@@ -45,7 +51,9 @@ char encode_coordinate(uint8_t x, uint8_t y)
 void send_coordinate(uint8_t x, uint8_t y)
 {  
     char ch = encode_coordinate(x, y);
-    ir_uart_putc (ch);
+    if (ir_uart_write_ready_p()) {
+        ir_uart_putc (ch);
+    }
 }
 
 /*
@@ -55,36 +63,46 @@ void send_coordinate(uint8_t x, uint8_t y)
 */
 void select_attack(void) // Maybe want to pass through a pointer to a uint8_t partNum instead of local partN
 {
+    attack_type_t attack_type = AREA; // <- Change this to the attack type selected by the player
     start_position = tinygl_point(2,3);
     bool is_selected = false; 
     while (is_selected == false) {
+        if (attack_type == SINGLE) {
+            tinygl_draw_point(start_position, 1);
+        } else if (attack_type == AREA) {
+            //Draw a 3x3 box around the start position
+            tinygl_draw_box(tinygl_point(start_position.x - 1, start_position.y - 1), tinygl_point(start_position.x + 1, start_position.y + 1), 1);
+        } else if (attack_type == TORPEDO) {
+            //Take the start position, and on its column draw a line from top to bottom
+            tinygl_draw_line(tinygl_point(start_position.x, 0), tinygl_point(start_position.x, 6), 1);
+        }
         pacer_wait ();
         tinygl_update ();
         navigation(&start_position, &is_selected);
         //drawAllParts(partN);
     }
     attack_t attack = {.col = start_position.x, .row = start_position.y}; // <- Do we need this? Can't we just use start_position?
-    while(1) {
-        led_set(LED1, 0);
-        // Broadcast the coordinate until a character is received
-        while (1) {
-            // Check if a character is ready to be received
-            if (ir_uart_read_ready_p()) {
-                // Extract the received character
-                received_char = ir_uart_getc(); 
-                // Check if the received character is '-' or '+'
-                if (received_char == '-' || received_char == '+') {
+    // Broadcast the coordinate until a character is received
+    // Check if a character is ready to be received
+    send_coordinate(attack.col, attack.row);
+    pacer_wait();
+    while (1) {
+        if (ir_uart_read_ready_p()) {
+            // Extract the received character
+            received_char = ir_uart_getc(); 
+            // Check if the received character is '-' or '+'
+            if (received_char == '-' || received_char == '+') {
+                tinygl_draw_char(received_char,tinygl_point (0, 0));
+                while (1) {
+                    tinygl_update();
+                    pacer_wait();
+                }
+                if (received_char == '+') {
                     led_set(LED1, 1);
-                    if (received_char == '+') {
-                        opponent_parts--;
-                    }
-                    break; // Exit the loop if '-' or '+' is received
+                    opponent_parts--;
                 }
             }
-            // Send the coordinate if the received character is not '-' or '+'
-            send_coordinate(attack.col, attack.row);
-            pacer_wait();
         }
-        break; // Exit the loop once a character is received and processed
     }
+    // Send the coordinate if the received character is not '-' or '+'
 }
