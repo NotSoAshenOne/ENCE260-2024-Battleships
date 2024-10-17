@@ -51,7 +51,7 @@ void game_loop(void)
 
 /*
     Controls the cursor navigation and select by using the navswitch.
-    Displays the cursor.
+    Displays the cursor and moves it by updating the select_position value.
     Params:
             select_position: the pointer to the position of the cursor.
             is_selected: the pointer to the bool stating if the cursor position has been selected.
@@ -183,7 +183,7 @@ void ship_navigation(tinygl_point_t* select_position, bool* is_selected, uint8_t
             (*is_selected) = true;
         }
         draw_ship((select_position->y),(select_position->x), length, (*orientation));
-        if (ship_num != 10) {
+        if (ship_num != MAX_SHIPS) {
             drawAllShips(ship_num);
         }
 }
