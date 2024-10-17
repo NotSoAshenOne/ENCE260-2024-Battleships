@@ -1,7 +1,10 @@
 #include "ship.h"
+#include "game.h"
+
 #include "system.h"
 #include "tinygl.h"
-#include <stdbool.h>
+#include "navswitch.h"
+#include "button.h"
 
 /*
     Initialisation of variables
@@ -10,25 +13,27 @@ uint8_t ship_positions[ROWS][COLUMNS] = {0};
 orientation_t ship_orientation = HORIZONTAL;
 
 /*
-Draws a ship to the on the matrix screen.
-Checks if the ship is horizontal or vertical and then increments from the ship origin until it reaches the ship length.
+    Draws a ship to the on the matrix screen, checks if the ship is horizontal or vertical and then increments from the ship origin 
+    until it reaches the ship end as determined by the origin plus the length.
+    Params: 
+            row: the row co-ordinate of the ship's origin.
+            col: the column co-ordinate of the ship's origin.
+            length: the length of the ship.
+            orientation: the orientation of the ship.
 */
 void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation)
 {
-    tinygl_init(1000);
+    // tinygl_init(1000);
     // Clear the display
     tinygl_clear();
-
     if (orientation == HORIZONTAL) {
         // Calculate the end point of the ship
         int end_col = col + length - 1;
-
         // Ensure the ship stays within the display bounds
         if (end_col >= COLUMNS) {
             end_col = COLUMNS - 1;
             col = end_col - length + 1;
         }
-
         // Draw the ship horizontally
         for (int i = 0; i < length; i++) {
             tinygl_draw_point(tinygl_point(col + i, row), 1);
@@ -36,13 +41,11 @@ void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientati
     } else {
         // Calculate the end point of the ship
         int end_row = row + length - 1;
-
         // Ensure the ship stays within the display bounds
         if (end_row >= ROWS) {
             end_row = ROWS - 1;
             row = end_row - length + 1;
         }
-
         // Draw the ship vertically
         for (int i = 0; i < length; i++) {
             tinygl_draw_point(tinygl_point(col, row + i), 1);
@@ -53,28 +56,34 @@ void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientati
 }
 
 /*
-Adds a ship_t to the ships array.
+    Adds a ship_t to the ships[] array.
+    Params:
+            row: the row co-ordinate of the ship's origin.
+            col: the column co-ordinate of the ship's origin.
+            length: the length of the ship.
+            orientation: the orientation of the ship.
+            ship_num: the ship number from 0, 1, 2.
 */
-void addShip(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation, uint8_t ship_num) 
+void add_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation, uint8_t ship_num) 
 {
-    ship_t shipAdd = {.row = row, .col = col, .length = length, .orientation = orientation, .sunk = false};
-    ships[ship_num] = shipAdd;    
+    ship_t ship_add = {.row = row, .col = col, .length = length, .orientation = orientation, .sunk = false};
+    ships[ship_num] = ship_add;    
 }
 
 /*
-Adds the individual parts of a ship to the parts matrix.
-Checks if the ship is horizontal or a vertical and increments the column and row values respectively.
-params ship_num is the ship number from 0,1,2 that the player will place.
+    Adds the individual parts of a ship to the parts matrix.
+    Checks if the ship is horizontal or a vertical and increments the column and row values respectively.
+    Know the length of each ship so the index is set to the next non-ship position.
+    Params:
+            ship_num: the ship number from 0, 1, 2 that the player will place.
 */
-void addShipPart(uint8_t ship_num)
+void add_ship_part(uint8_t ship_num)
 {
     ship_t ship = ships[ship_num];
     uint8_t index;
-    ship_part_t shipPart;
     if (ship_num == 0) {
-        /* code */
         index = 0;
-        for (size_t i = 0; i < 2; i++) {
+        for (size_t i = 0; i < SHIP_ONE_LENGTH; i++) {
             if (ship.orientation == HORIZONTAL) {
                 parts[i+index] = (ship_part_t){ship.row, ((ship.col)+i), false};
             } else {
@@ -82,17 +91,17 @@ void addShipPart(uint8_t ship_num)
             }
         }
     } else if (ship_num == 1) {
-        index = 2;
-        for (size_t i = 0; i < 3; i++) {
+        index = SHIP_ONE_LENGTH;
+        for (size_t i = 0; i < SHIP_TWO_LENGTH; i++) {
             if (ship.orientation == HORIZONTAL) {
                 parts[i+index] = (ship_part_t){ship.row, ((ship.col)+i), false};
             } else {
                 parts[i+index] = (ship_part_t){((ship.row)+i), ship.col, false};
             }
         }
-    } else if (ship_num ==2) {
-        index = 5;
-        for (size_t i = 0; i < 4; i++) {
+    } else if (ship_num == 2) {
+        index = SHIP_ONE_LENGTH + SHIP_TWO_LENGTH;
+        for (size_t i = 0; i < SHIP_THREE_LENGTH; i++) {
             if (ship.orientation == HORIZONTAL) {
                 parts[i+index] = (ship_part_t){ship.row, ((ship.col)+i), false};
             } else {
@@ -103,22 +112,26 @@ void addShipPart(uint8_t ship_num)
 }
 
 /*
-Draws all the ships in the ships array using the draw_ship function.
-[Possibly redundant?] <- Used in the ship navigation.
+    Draws all the ships in the ships array using the draw_ship function.
+    Used to draw all the ships during the ship placement phase.
+    Params: 
+            ship_num: the ship number from 0,1,2 that the player placed.
  */
-void drawAllShips(uint8_t shipN) 
+void draw_all_ships(uint8_t ship_num) 
 {
-    ship_t ship = ships[shipN];
+    ship_t ship = ships[ship_num];
     draw_ship(ship.row, ship.col, ship.length, ship.orientation);
 }
 
 /*
-Draws all the parts in the parts array using tinygl.
-Checks if a ship is hit and causes it to flash if it hit.
+    Draws the given ship part from the parts[] array.
+    Params:
+            part_num: the part number from 0, 1, 2, 3, 4, 5, 6, 7, 8 parts in the parts[] array.
+            round: the round of the loop, used to only show the hit parts sometimes to cause flashing on the led matrix.
 */
-void drawAllParts(uint8_t partN, uint8_t round) 
+void draw_part(uint8_t part_num, uint8_t round) 
 {   
-    ship_part_t part = parts[partN];
+    ship_part_t part = parts[part_num];
     tinygl_point_t point = {.x = part.col, .y = part.row};
     if (part.hit == true) {
         tinygl_draw_point(point, 0);
@@ -130,38 +143,123 @@ void drawAllParts(uint8_t partN, uint8_t round)
     }    
 }
 
-void draw_hit_parts(uint8_t part_num, uint8_t round)
+/*
+    Loops through the opponent_parts[] array to draw all hit parts.
+*/
+void draw_hit_parts(void)
 {
-    ship_part_t part = opponent_parts[part_num];
-    tinygl_point_t point = {.x = part.col, .y = part.row};
-    if (part.hit == true) {
-        tinygl_draw_point(point, 0);
-        if (round%5 == 0) {     // Making it flash by only showing every 5 times through all the parts. Use the same number for % must be prime.
-            tinygl_draw_point(point, 1);
-        }   
-    }
+    for (size_t i = 0; i < opponent_parts_hit; i++) {
+            tinygl_draw_point(tinygl_point(opponent_parts[i].col, opponent_parts[i].row), 1);
+        }
 }
 
 /*
-Shows the parts of the ships on the screen to the user, lasts while the button is not pressed.
-Uses drawAllParts function.
+    Calls draw_part while in a loop to draw all the ship_part_t in parts[] array to draw all the ships.
+    Params:
+            part_num: the part number from 0, 1, 2, 3, 4, 5, 6, 7, 8 parts in the parts[] array to be drawn.
+            round: the round of the loop, used to only show the hit parts sometimes to cause flashing on the led matrix.
 */
 void display_ships (uint8_t part_num, uint8_t round_num) 
 {
-    // tinygl_clear();
-    // uint8_t roundN = 0;
-    // uint8_t partN = 0;
-    // bool isFinished = false;
-    // while (isFinished == false) {
-        pacer_wait ();
-        tinygl_update ();
-        button_update();
-        drawAllParts(part_num, round_num);
-        // (*round_num) = ((*round_num)+1)%5;
-        // (*part_num) = ((*part_num)+1)%9;
-        // if (button_push_event_p (0)) {
-        //     isFinished = true;
-        // }
-    // }
+    // pacer_wait ();
+    // tinygl_update ();
+    draw_part(part_num, round_num);
 }
 
+/*
+    Controls the navigation of the ships on the screen during the setup phase by using the navswitch, allows the movement and rotation of the ships.
+    Checks if the final part of the ship has reached the edge of the matrix screen and if it has then sends the other end of the ship to the other edge of the screen.
+    Then displays the ships that have previously been placed.
+    Params:
+            select_position: the pointer to the position of the cursor.
+            is_selected: the pointer to the bool stating if the cursor position has been selected.
+            length: the length of the ship to be navigated around the screen.
+            orientation: the pointer to the orientation of the ship displayed.
+            ship_num: the previously placed ship to be displayed on the matrix screen.            
+*/
+void ship_navigation(tinygl_point_t* select_position, bool* is_selected, uint8_t length, orientation_t* orientation, uint8_t ship_num) 
+{
+        tinygl_clear ();
+        navswitch_update ();
+        button_update ();
+        if (button_push_event_p (0)) {
+            if ((*orientation) == HORIZONTAL) {
+                if (select_position->y >(ROWS-length)) { 
+                    select_position->y = (ROWS-length);
+                }
+                (*orientation) = VERTICAL;
+            } else {
+                if (select_position->x > (COLUMNS-length)) {
+                    select_position->x = (COLUMNS-length);
+                }
+                (*orientation) = HORIZONTAL;
+            }
+        }
+        else if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
+            if (*orientation == VERTICAL) {
+                if (select_position->y == 0) {
+                    select_position->y = (ROWS-length);
+                } else {
+                    select_position->y += -1;
+                }
+            } else {
+                if (select_position->y == 0) {
+                    select_position->y = 6;
+                } else {
+                    select_position->y += -1;
+                }
+            }
+        } 
+        else if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
+            if (*orientation == VERTICAL) {
+                if (select_position->y == (ROWS-length)) {
+                    select_position->y = 0;
+                } else {
+                    select_position->y += 1;
+                }
+            } else {
+                if (select_position->y == 6) {
+                    select_position->y = 0;
+                } else {
+                    select_position->y += 1;
+                }
+            }
+        }
+        else if (navswitch_push_event_p (NAVSWITCH_EAST)) {
+            if (*orientation == HORIZONTAL) {
+                if (select_position->x == (COLUMNS-length)) {
+                    select_position->x = 0;
+                } else {
+                    select_position->x += 1;
+                }
+            } else {
+                if (select_position->x == 4) {
+                select_position->x = 0;
+                } else {
+                select_position->x += 1;
+                }
+            }
+        }
+        else if (navswitch_push_event_p (NAVSWITCH_WEST)) {
+            if (*orientation == HORIZONTAL) {
+                if (select_position->x == 0) {
+                    select_position->x = (COLUMNS-length);
+                } else {
+                    select_position->x += -1;
+                }
+            } else {
+                if (select_position->x == 0) {
+                select_position->x = 4;
+                } else {
+                select_position->x += -1;
+                }
+            }
+        }
+        else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
+            (*is_selected) = true;
+        }
+        draw_ship((select_position->y),(select_position->x), length, (*orientation));
+        if (ship_num != MAX_SHIPS) {
+            draw_all_ships(ship_num);
+        }
+}

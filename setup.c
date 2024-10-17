@@ -1,13 +1,13 @@
-
-#include "tinygl.h"
-#include "pacer.h"
-#include "navswitch.h"
 #include "ship.h"
 #include "game.h"
-#include "system.h"
 #include "setup.h"
-#include <stdlib.h>
-#include <avr/io.h>   
+
+#include "system.h"
+#include "ir_uart.h"
+#include "tinygl.h"
+#include "pacer.h"
+#include "button.h"
+#include "led.h"
 
 ship_t ships[MAX_SHIPS];
 ship_part_t parts[MAX_SHIP_PARTS];
@@ -31,7 +31,6 @@ bool handshake(void)
     tinygl_clear();
     while (1) {
         button_update();
-        //When a player pushes the navswitch button, they are deemed the defender, and the other player is the attacker 
         if (button_down_p(0)) {
             led_set(LED1, 1);
             ir_uart_putc(HANDSHAKE_CHAR);
@@ -86,7 +85,7 @@ void placeShips()
                 ship = (ship+1)%i;   
             }
         }
-        addShip(start_position.y, start_position.x, length, ship_orientation, i);
-        addShipPart(i);
+        add_ship(start_position.y, start_position.x, length, ship_orientation, i);
+        add_ship_part(i);
     }
 }

@@ -1,36 +1,27 @@
 #include "winlose.h"
 #include "tinygl.h"
-#include "pacer.h"
 
-typedef enum {
-    WIN,
-    LOSE
-} winlose_t;
-
+/*
+    The main loop for the win / lose phase within the game loop. Checks if a win and then draws a 'W' for a win and 'L' for loss.
+    Params:
+            win: a boolean stating if the player won.
+*/
 void winlose_phase(bool win)
 {
-    char c = ' ';
-    // winlose_t result;
-    if (win){
-        // result = WIN;
-        c = 'W';
-    } else {
-        // result = LOSE;
-        c = 'L';
-    }
-
-    // if (result == WIN) {
-    //     c = 'W';
-    // } else if (result == LOSE) {
-    //     c = 'L';
-    // }
-
-    if (c == 'W') {
+    // char c = ' ';
+    if (win) {
+        // c = 'W';
         tinygl_draw_char('W',tinygl_point (0, 0));
-    } else if (c == 'L') {
-        tinygl_draw_char('L',tinygl_point (0, 0));
     } else {
-        tinygl_draw_char(' ',tinygl_point (0, 0));
+        // c = 'L';
+        tinygl_draw_char('L',tinygl_point (0, 0));
     }
+    // if (c == 'W') {
+    //     tinygl_draw_char('W',tinygl_point (0, 0));
+    // } else if (c == 'L') {
+    //     tinygl_draw_char('L',tinygl_point (0, 0));
+    // } else {
+    //     tinygl_draw_char(' ',tinygl_point (0, 0));
+    // }
     tinygl_update ();
 }

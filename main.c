@@ -1,13 +1,14 @@
-#include "system.h"
+// Game Modules
 #include "game.h"
-#include "pacer.h"
-#include "ship.h"
-#include "setup.h"
+// Funkit Drivers
 #include "ir_uart.h"
 #include "button.h"
 #include "led.h"
+#include "tinygl.h"
+#include "pacer.h"
 #include "../fonts/font3x5_1.h"
 #include "../fonts/font5x7_1.h"
+#include "system.h"
 
 
 

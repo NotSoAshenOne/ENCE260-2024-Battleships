@@ -1,43 +1,52 @@
-#include <stdint.h>
+/** 
+    File Name: attack.c
+    Authors: Morgan Lee (mle150) and Kaden Adlington (kad112)
+    Date: 12/10/2024
+    Function: Contains all the functions and capabilites for attacking and sending that attack to the opposite UCFK4.
 
+*/
+
+#include <stdint.h>
+#include <stdio.h>
+#include <stdbool.h>
+// Game Modules
 #include "attack.h"
 #include "game.h"
+#include "ship.h"
+// Funkit Drivers
 #include "ir_uart.h"
 #include "tinygl.h"
 #include "pacer.h"
-#include <stdio.h>
-#include <stdbool.h>
+#include "led.h"
+#include "navswitch.h"
 
+#define MAX_ATTACKS 10
+
+/*
+    Defines the different attack types.
+ */
 typedef enum {
     SINGLE,
     AREA,
     TORPEDO
 } attack_type_t;
 
-#define MAX_ATTACKS 10
-
+/*
+    Defines the Coordinate struct to store (column,row) co-ordinate pairs.
+*/
 typedef struct {
     int row;
     int col;
 } Coordinate;
 
+// Initialise the arrays for attacking and storing the successful hits.
 Coordinate attack_coordinates[MAX_ATTACKS];
-int attack_count = 0;
-
-void add_attack_coordinate(int row, int col) {
-    if (attack_count < MAX_ATTACKS) {
-        attack_coordinates[attack_count].row = row;
-        attack_coordinates[attack_count].col = col;
-        attack_count++;
-    }
-}
-
+ship_part_t opponent_parts[MAX_SHIP_PARTS];
 // Initialise the starting position.
 tinygl_point_t start_position;
-// Initialise the received char for IR interaction.
+// Initialise the received char for IR interaction and the attack counter.
 char received_char = ' ';
-
-ship_part_t opponent_parts[MAX_SHIP_PARTS];
+int attack_count = 0;
 
 /*
     Runs the main attacking phase within the game loop.
@@ -48,6 +57,17 @@ void attack_phase(void)
     led_set(LED1, 0);
     select_attack();
     current_game_state = DEFEND;
+}
+
+/*
+    Adds the (column,row) co-ordinate pair to the attack_coordinates[] array for multi-hit attacks.
+*/
+void add_attack_coordinate(int row, int col) {
+    if (attack_count < MAX_ATTACKS) {
+        attack_coordinates[attack_count].row = row;
+        attack_coordinates[attack_count].col = col;
+        attack_count++;
+    }
 }
 
 /*
@@ -78,43 +98,35 @@ void send_coordinate(uint8_t x, uint8_t y)
 }
 
 /*
-    Displays a pointer on the screen which then can be controlled through the navigation() function.
+    Displays a pointer on the screen which then can be controlled through the navigation() function. Every third turn the pointer is replaced by 3x3 box area attack
+    and every sixth turn it is replaced by a column 'torpedo' attack.
     Once the player selects a point then it is transmitted until another character is received, that
     character is then checked and if it is '-' or '+' then the IR transmission is ended.
+    If the attack hits an opponent ship then the opponent_parts[] array and opponent_parts_hit counter are updated.
 */
 void select_attack(void) // Maybe want to pass through a pointer to a uint8_t partNum instead of local partN
 {
     uint8_t ir_sends = 0;
-    
-    // Every 3rd turn use area, every 6th turn use torpedo
     attack_type_t attack_type = SINGLE;
-
     if (game_turn != 0 && game_turn % 3 == 0 && game_turn % 6 != 0) {
         attack_type = AREA;
     }else if (game_turn != 0 && game_turn % 6 == 0) {
         attack_type = TORPEDO;
     }
-
     start_position = tinygl_point(2,3);
-    // uint8_t round = 0;
     bool is_selected = false; 
     while (is_selected == false) {
         if (attack_type == SINGLE) {
             tinygl_draw_point(start_position, 1);
         } else if (attack_type == AREA) {
-            //Draw a 3x3 box around the start position
             tinygl_draw_box(tinygl_point(start_position.x - 1, start_position.y - 1), tinygl_point(start_position.x + 1, start_position.y + 1), 1);
         } else if (attack_type == TORPEDO) {
-            //Take the start position, and on its column draw a line from top to bottom
             tinygl_draw_line(tinygl_point(start_position.x, 0), tinygl_point(start_position.x, 6), 1);
         }
         pacer_wait ();
         tinygl_update ();
         navigation(&start_position, &is_selected);
-        for (size_t i = 0; i < opponent_parts_hit; i++) {
-            tinygl_draw_point(tinygl_point(opponent_parts[i].col, opponent_parts[i].row), 1);
-        }
-        // round = (round+1)%5;
+        draw_hit_parts();
     }
     if (attack_type == SINGLE) {
         add_attack_coordinate(start_position.y, start_position.x);
@@ -132,17 +144,12 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
             ir_sends++;
         }
     }
-    // Broadcast the coordinate until a character is received
-    // Check if a character is ready to be received
     int i = 0;
     while (i < ir_sends) {
-        // Send the coordinate
         send_coordinate(attack_coordinates[i].col, attack_coordinates[i].row);
         while (1) {
             if (ir_uart_read_ready_p()) {
-                // Extract the received character
                 received_char = ir_uart_getc(); 
-                // Check if the received character is '-' or '+'
                 if (received_char == '-' || received_char == '+') {
                     if (received_char == '+') {
                         opponent_parts[opponent_parts_hit] = (ship_part_t){attack_coordinates[i].row, attack_coordinates[i].col, true};
@@ -156,4 +163,45 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
         }
     }
     attack_count = 0;
+}
+
+/*
+    Controls the cursor navigation and select by using the navswitch.
+    Displays the cursor and moves it by updating the select_position value.
+    Params:
+            select_position: the pointer to the position of the cursor.
+            is_selected: the pointer to the bool stating if the cursor position has been selected.
+*/
+void navigation(tinygl_point_t* select_position, bool* is_selected) 
+{
+        tinygl_clear ();
+        navswitch_update ();
+        if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
+            if (select_position->y == 0) {
+                select_position->y = 6;
+            } else {
+                select_position->y += -1;
+            }
+        } else if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
+            if (select_position->y == 6) {
+                select_position->y = 0;
+            } else {
+                select_position->y += 1;
+            }
+        } else if (navswitch_push_event_p (NAVSWITCH_EAST)) {
+            if (select_position->x == 4) {
+                select_position->x = 0;
+            } else {
+                select_position->x += 1;
+            }
+        } else if (navswitch_push_event_p (NAVSWITCH_WEST)) {
+            if (select_position->x == 0) {
+                select_position->x = 4;
+            } else {
+                select_position->x += -1;
+            }
+        } else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
+            (*is_selected) = true;
+        }
+        tinygl_draw_point((*select_position), 1); 
 }
