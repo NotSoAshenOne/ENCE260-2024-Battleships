@@ -14,6 +14,24 @@ typedef enum {
     TORPEDO
 } attack_type_t;
 
+#define MAX_ATTACKS 10
+
+typedef struct {
+    int row;
+    int col;
+} Coordinate;
+
+Coordinate attack_coordinates[MAX_ATTACKS];
+int attack_count = 0;
+
+void add_attack_coordinate(int row, int col) {
+    if (attack_count < MAX_ATTACKS) {
+        attack_coordinates[attack_count].row = row;
+        attack_coordinates[attack_count].col = col;
+        attack_count++;
+    }
+}
+
 // Initialise the starting position.
 tinygl_point_t start_position;
 // Initialise the received char for IR interaction.
@@ -65,7 +83,8 @@ void send_coordinate(uint8_t x, uint8_t y)
 */
 void select_attack(void) // Maybe want to pass through a pointer to a uint8_t partNum instead of local partN
 {
-    attack_type_t attack_type = AREA; // <- Change this to the attack type selected by the player
+    uint8_t ir_sends = 0;
+    attack_type_t attack_type = SINGLE; // <- Change this to the attack type selected by the player
     start_position = tinygl_point(2,3);
     // uint8_t round = 0;
     bool is_selected = false; 
@@ -75,9 +94,11 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
         } else if (attack_type == AREA) {
             //Draw a 3x3 box around the start position
             tinygl_draw_box(tinygl_point(start_position.x - 1, start_position.y - 1), tinygl_point(start_position.x + 1, start_position.y + 1), 1);
+            ir_sends = 9;
         } else if (attack_type == TORPEDO) {
             //Take the start position, and on its column draw a line from top to bottom
             tinygl_draw_line(tinygl_point(start_position.x, 0), tinygl_point(start_position.x, 6), 1);
+            ir_sends = 7;
         }
         pacer_wait ();
         tinygl_update ();
@@ -87,25 +108,43 @@ void select_attack(void) // Maybe want to pass through a pointer to a uint8_t pa
         }
         // round = (round+1)%5;
     }
-    attack_t attack = {.col = start_position.x, .row = start_position.y}; // <- Do we need this? Can't we just use start_position?
+    if (attack_type == SINGLE) {
+        add_attack_coordinate(start_position.y, start_position.x);
+        ir_sends = 1;
+    } else if (attack_type == AREA) {
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                add_attack_coordinate(start_position.y + i, start_position.x + j);
+                ir_sends++;
+            }
+        }
+    } else if (attack_type == TORPEDO) {
+        for (int i = 0; i < 7; i++) {
+            add_attack_coordinate(i, start_position.x);
+            ir_sends++;
+        }
+    }
     // Broadcast the coordinate until a character is received
     // Check if a character is ready to be received
-    send_coordinate(attack.col, attack.row);
-    pacer_wait();
-    while (1) {
-        if (ir_uart_read_ready_p()) {
-            // Extract the received character
-            received_char = ir_uart_getc(); 
-            // Check if the received character is '-' or '+'
-            if (received_char == '-' || received_char == '+') {
-                if (received_char == '+') {
-                    led_set(LED1, 1);
-                    opponent_parts[opponent_parts_hit] = (ship_part_t){attack.row, attack.col, true};
-                    opponent_parts_hit++;
+    int i = 0;
+    while (i < ir_sends) {
+        // Send the coordinate
+        send_coordinate(attack_coordinates[i].col, attack_coordinates[i].row);
+        while (1) {
+            if (ir_uart_read_ready_p()) {
+                // Extract the received character
+                received_char = ir_uart_getc(); 
+                // Check if the received character is '-' or '+'
+                if (received_char == '-' || received_char == '+') {
+                    if (received_char == '+') {
+                        opponent_parts[opponent_parts_hit] = (ship_part_t){attack_coordinates[i].row, attack_coordinates[i].col, true};
+                        opponent_parts_hit++;
+                    }
+                    i++;
+                    break;
                 }
-                break;
+                
             }
-            
         }
     }
     // Send the coordinate if the received character is not '-' or '+'
