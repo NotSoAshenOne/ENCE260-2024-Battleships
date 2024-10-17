@@ -29,6 +29,7 @@ char received = ' ';
 bool handshake(void) 
 {
     tinygl_clear();
+    tinygl_update();
     while (1) {
         button_update();
         //When a player pushes the navswitch button, they are deemed the defender, and the other player is the attacker 
