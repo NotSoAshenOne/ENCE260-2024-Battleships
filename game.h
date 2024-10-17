@@ -31,6 +31,6 @@ void game_loop(void);
 void navigation(tinygl_point_t* selectPosition, bool* isSelected);
 void ship_navigation(tinygl_point_t* selectPosition, bool* isSelected, uint8_t length, orientation_t* orientation, uint8_t shipN);
 void drawAllShips(uint8_t shipN);
-void setup_phase(void);
+// void setup_phase(void);
 
 #endif // GAME_H

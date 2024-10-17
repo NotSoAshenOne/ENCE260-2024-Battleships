@@ -29,7 +29,7 @@ void game_loop(void)
     while (1)
     {
         if (current_game_state == SETUP) {
-            setup_phase();
+            setup_phase(&is_player1);
         } else if (current_game_state == ATTACK) {
             tinygl_clear();
             attack_phase();

@@ -13,10 +13,10 @@ void winlose_phase(bool win)
     // winlose_t result;
     if (win){
         // result = WIN;
-        c = 'W'
+        c = 'W';
     } else {
         // result = LOSE;
-        c = 'L'
+        c = 'L';
     }
 
     // if (result == WIN) {
