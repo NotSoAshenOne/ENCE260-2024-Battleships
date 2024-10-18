@@ -29,12 +29,6 @@
 #include "pacer.h"
 
 /*
-    Initialisation of variables
-*/
-uint8_t ship_positions[ROWS][COLUMNS] = {0};
-orientation_t ship_orientation = HORIZONTAL;
-
-/*
     Draws a ship to the on the matrix screen, checks if the ship is horizontal or vertical and then increments from the ship origin 
     until it reaches the ship end as determined by the origin plus the length.
     Params: 
@@ -45,8 +39,6 @@ orientation_t ship_orientation = HORIZONTAL;
 */
 void draw_ship(uint8_t row, uint8_t col, uint8_t length, orientation_t orientation)
 {
-    // tinygl_init(1000);
-    // Clear the display
     tinygl_clear();
     if (orientation == HORIZONTAL) {
         // Calculate the end point of the ship
