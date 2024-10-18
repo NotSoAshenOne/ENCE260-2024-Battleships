@@ -13,9 +13,9 @@
 
 // Game Modules
 #include "winlose.h"
+#include "game.h"
 // Funkit Drivers
 #include "tinygl.h"
-#include "game.h"
 #include "button.h"
 
 /*

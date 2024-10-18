@@ -9,21 +9,21 @@ DEL = rm
 all: game.out
 
 # Compile: create object files from C source files.
-game.o: game.c setup.h attack.h defend.h winlose.h ship.h ../../drivers/avr/system.h ../../utils/tinygl.h
+game.o: game.c setup.h attack.h defend.h winlose.h ship.h ../../drivers/avr/system.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/button.h ../../drivers/led.h ../../drivers/avr/system.h ../../drivers/avr/ir_uart.h ../../utils/font.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-ship.o: ship.c ship.h game.h ../../drivers/avr/system.h ../../utils/tinygl.h ../../drivers/navswitch.h ../../drivers/button.h
+ship.o: ship.c ship.h game.h ../../drivers/avr/system.h ../../utils/tinygl.h ../../drivers/navswitch.h ../../drivers/button.h ../../utils/pacer.h
 
 setup.o: setup.c ship.h setup.h game.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/button.h ../../drivers/led.h ../../drivers/avr/system.h ../../drivers/avr/ir_uart.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-attack.o: attack.c attack.h game.h ship.h ../../drivers/avr/ir_uart.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/led.h ../../drivers/navswitch.h
+attack.o: attack.c attack.h game.h ship.h ../../drivers/avr/ir_uart.h ../../utils/tinygl.h ../../utils/pacer.h ../../drivers/led.h ../../drivers/navswitch.h ../../drivers/button.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 defend.o: defend.c defend.h ship.h game.h ../../drivers/avr/ir_uart.h ../../utils/tinygl.h ../../drivers/button.h ../../drivers/led.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-winlose.o: winlose.c winlose.h ../../utils/tinygl.h
+winlose.o: winlose.c winlose.h game.h ../../utils/tinygl.h ../../drivers/button.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 pio.o: ../../drivers/avr/pio.c ../../drivers/avr/pio.h ../../drivers/avr/system.h
