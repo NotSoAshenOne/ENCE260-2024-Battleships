@@ -174,7 +174,7 @@ void send_attack(void)
         while (1) {
             if (ir_uart_read_ready_p()) {
                 received_char = ir_uart_getc(); 
-                if (received_char == '-' || received_char == '+') {
+                if (received_char == (MISS) || received_char == HIT) {
                     if (received_char == '+') {
                         opponent_parts[opponent_parts_hit] = (ship_part_t){attack_coordinates[i].row, attack_coordinates[i].col, true};
                         opponent_parts_hit++;
@@ -187,10 +187,12 @@ void send_attack(void)
     }
     tinygl_draw_char(opponent_parts_hit + '0', tinygl_point(0,0));
     while (1) {
+        led_set(LED1, 1);
         button_update();
         pacer_wait();
         tinygl_update();
         if (button_push_event_p(0)) {
+            led_set(LED1, 0);
             break;
         }
     }

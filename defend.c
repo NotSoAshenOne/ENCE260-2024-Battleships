@@ -86,10 +86,10 @@ void defend_phase(void)
 void check_hit(uint8_t x, uint8_t y) 
 {
     if (check_part_hit(x, y)) {
-        ir_uart_putc('+');
+        ir_uart_putc(HIT);
         led_set(LED1, 1);
     } else {
-        ir_uart_putc('-');
+        ir_uart_putc(MISS);
     }
 }
 

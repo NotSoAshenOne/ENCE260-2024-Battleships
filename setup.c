@@ -32,7 +32,7 @@ int count = 0;
 bool is_device_1 = false;
 char received = ' ';
 
-#define HANDSHAKE_CHAR '*'
+//#define HANDSHAKE_CHAR '*'
 #define TIMEOUT 5000 // Timeout value in milliseconds
 
 /*
@@ -49,10 +49,10 @@ bool handshake(void)
         button_update();
         if (button_down_p(0)) {
             led_set(LED1, 1);
-            ir_uart_putc(HANDSHAKE_CHAR);
+            ir_uart_putc(START);
             is_device_1 = false;
             break;
-        } else if (ir_uart_read_ready_p() && ir_uart_getc() == HANDSHAKE_CHAR) {
+        } else if (ir_uart_read_ready_p() && ir_uart_getc() == START) {
             is_device_1 = true;
             break;
         }
