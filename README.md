@@ -37,6 +37,8 @@ The game ends when one side loses all their ships:
   - **W** for a win.
   - **L** for a loss.
 
+You can then press the button to restart the game and get right back to playing.
+
 ## Special Attacks
 
 In addition to normal attacks, every few turns, the attacker will gain access to powerful attacks:
