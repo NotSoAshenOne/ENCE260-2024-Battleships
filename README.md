@@ -26,7 +26,8 @@ The defender's screen displays the current positions of their ships. Ships will 
 The attacker’s screen displays a target, indicating where they are aiming. The attacker only sees successful hits—misses will not be shown on the display.
 
 - **Attack**: Once the target is selected, press down the navswitch to send the attack.
-- **Hit/Miss Confirmation**: Both sides will confirm whether the attack was a hit or miss. After confirmation, the game automatically switches back to the defender phase.
+- **Hit/Miss Confirmation**: Both sides will confirm whether the attack was a hit or miss. After confirmation, the attacker will be presented with a number indicating their current hits.
+- When the **blue LED** turns on, this indicates the attacker can switch to the defender phase.
 
 ### **Winning and Losing**
 The game ends when one side loses all their ships:
