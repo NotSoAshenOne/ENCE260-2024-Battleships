@@ -25,15 +25,11 @@
 #include "button.h"
 #include "led.h"
 
+// Initialises the ships[] array for storing player ships and the parts[] array for storing player parts.
 ship_t ships[MAX_SHIPS];
 ship_part_t parts[MAX_SHIP_PARTS];
-uint8_t ship_count = 0;
-int count = 0;
+// Initialises the variable for stating if the player is player_1.
 bool is_device_1 = false;
-char received = ' ';
-
-//#define HANDSHAKE_CHAR '*'
-#define TIMEOUT 5000 // Timeout value in milliseconds
 
 /*
     Initialises the players for the beginning of the game. If the player presses the button then sets the player to player1

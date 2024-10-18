@@ -149,7 +149,7 @@ void draw_part(uint8_t part_num, uint8_t round)
     tinygl_point_t point = {.x = part.col, .y = part.row};
     if (part.hit == true) {
         tinygl_draw_point(point, 0);
-        if (round%WHILE_LOOPS == 0) {     // Making it flash by only showing every 5 times through all the parts. Use the same number for % must be prime.
+        if (round%WHILE_LOOPS == 0) {
             tinygl_draw_point(point, 1);
         }
     } else {

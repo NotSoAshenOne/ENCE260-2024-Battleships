@@ -57,7 +57,6 @@ void defend_phase(void)
     uint8_t part = 0;
     while(1) {
         button_update();
-//        tinygl_update();
         if (ir_uart_read_ready_p()) {
             led_init();
             data = ir_uart_getc();
@@ -65,7 +64,6 @@ void defend_phase(void)
             check_hit(x, y);
         }
         display_ships(part, round);
-        // draw_part(part, round);
         round = (round+1)%WHILE_LOOPS;
         part = (part+1)%MAX_SHIP_PARTS;
         if (button_push_event_p (0) && data != 0) {
