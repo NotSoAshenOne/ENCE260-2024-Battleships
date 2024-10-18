@@ -15,6 +15,8 @@
 #include "winlose.h"
 // Funkit Drivers
 #include "tinygl.h"
+#include "game.h"
+#include "button.h"
 
 /*
     The main loop for the win / lose phase within the game loop. Checks if a win and then draws a 'W' for a win and 'L' for loss.
@@ -39,4 +41,12 @@ void winlose_phase(bool win)
 //         tinygl_draw_char(' ',tinygl_point (0, 0));
 //     }
     tinygl_update ();
+    button_update();
+    if (button_push_event_p (0)) {
+        current_game_state = SETUP;
+        game_turn = 1;
+        opponent_parts_hit = 0;
+        player_parts_hit = 0;
+    }
+
 }
