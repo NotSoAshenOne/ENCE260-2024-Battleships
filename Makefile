@@ -1,3 +1,9 @@
+#	File: Makefile
+#	Authors: Morgan Lee (mle150) and Kaden Adlington (kad112)
+#	Date: 12/10/2024
+#	Decr: Makefile for our battleships game.
+
+
 # Definitions.
 CC = avr-gcc
 CFLAGS = -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../fonts -I../../drivers -I../../drivers/avr
