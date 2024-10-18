@@ -72,6 +72,7 @@ void setup_phase(bool* is_player1)
         current_game_state = DEFEND;
     }
     (*is_player1) = is_device_1;
+    led_set(LED1, 0);
 }
 
 /*
