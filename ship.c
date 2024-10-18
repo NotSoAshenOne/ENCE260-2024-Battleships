@@ -26,6 +26,7 @@
 #include "tinygl.h"
 #include "navswitch.h"
 #include "button.h"
+#include "pacer.h"
 
 /*
     Initialisation of variables
@@ -182,9 +183,9 @@ void draw_hit_parts(void)
 */
 void display_ships (uint8_t part_num, uint8_t round_num) 
 {
-    // pacer_wait ();
-    // tinygl_update ();
-    draw_part(part_num, round_num);
+     pacer_wait ();
+     tinygl_update ();
+     draw_part(part_num, round_num);
 }
 
 /*

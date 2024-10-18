@@ -33,6 +33,7 @@
 #include "pacer.h"
 #include "led.h"
 #include "navswitch.h"
+#include "button.h"
 
 #define MAX_ATTACKS 10
 
@@ -182,6 +183,15 @@ void send_attack(void)
                 }
                 
             }
+        }
+    }
+    tinygl_draw_char(opponent_parts_hit + '0', tinygl_point(0,0));
+    while (1) {
+        button_update();
+        pacer_wait();
+        tinygl_update();
+        if (button_push_event_p(0)) {
+            break;
         }
     }
     attack_count = 0;

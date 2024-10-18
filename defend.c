@@ -57,15 +57,15 @@ void defend_phase(void)
     uint8_t part = 0;
     while(1) {
         button_update();
-        tinygl_update();
+//        tinygl_update();
         if (ir_uart_read_ready_p()) {
             led_init();
             data = ir_uart_getc();
             decode_coordinate(&x, &y, data);
             check_hit(x, y);
         }
-        // display_ships(part, round);
-        draw_part(part, round);
+        display_ships(part, round);
+        // draw_part(part, round);
         round = (round+1)%WHILE_LOOPS;
         part = (part+1)%MAX_SHIP_PARTS;
         if (button_push_event_p (0) && data != 0) {
@@ -109,9 +109,11 @@ bool check_part_hit(uint8_t x, uint8_t y)
 {
     for (size_t i = 0; i < MAX_SHIP_PARTS; i++) {
         if (parts[i].col == x && parts[i].row == y) {
-            parts[i].hit = true;
-            player_parts_hit++;
-            return true;
+            if (parts[i].hit == false) {
+                parts[i].hit = true;
+                player_parts_hit++;
+                return true;
+            }
         }
     }
     return false;

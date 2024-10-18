@@ -23,20 +23,20 @@
 */
 void winlose_phase(bool win)
 {
-    // char c = ' ';
+   // char c = ' ';
     if (win) {
-        // c = 'W';
+//         c = 'W';
         tinygl_draw_char('W',tinygl_point (0, 0));
     } else {
-        // c = 'L';
+//         c = 'L';
         tinygl_draw_char('L',tinygl_point (0, 0));
     }
-    // if (c == 'W') {
-    //     tinygl_draw_char('W',tinygl_point (0, 0));
-    // } else if (c == 'L') {
-    //     tinygl_draw_char('L',tinygl_point (0, 0));
-    // } else {
-    //     tinygl_draw_char(' ',tinygl_point (0, 0));
-    // }
+//     if (c == 'W') {
+//         tinygl_draw_char('W',tinygl_point (0, 0));
+//     } else if (c == 'L') {
+//         tinygl_draw_char('L',tinygl_point (0, 0));
+//     } else {
+//         tinygl_draw_char(' ',tinygl_point (0, 0));
+//     }
     tinygl_update ();
 }
