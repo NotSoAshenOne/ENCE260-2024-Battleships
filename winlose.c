@@ -20,33 +20,31 @@
 
 /*
     The main loop for the win / lose phase within the game loop. Checks if a win and then draws a 'W' for a win and 'L' for loss.
+    Player can then press the button to reset the game.
     Params:
             win: a boolean stating if the player won.
 */
 void winlose_phase(bool win)
 {
-   // char c = ' ';
     if (win) {
-//         c = 'W';
         tinygl_draw_char('W',tinygl_point (0, 0));
     } else {
-//         c = 'L';
         tinygl_draw_char('L',tinygl_point (0, 0));
     }
-//     if (c == 'W') {
-//         tinygl_draw_char('W',tinygl_point (0, 0));
-//     } else if (c == 'L') {
-//         tinygl_draw_char('L',tinygl_point (0, 0));
-//     } else {
-//         tinygl_draw_char(' ',tinygl_point (0, 0));
-//     }
     tinygl_update ();
     button_update();
     if (button_push_event_p (0)) {
-        current_game_state = SETUP;
-        game_turn = 1;
-        opponent_parts_hit = 0;
-        player_parts_hit = 0;
+        reset_game();
     }
+}
 
+/*
+    Resets the game variables to the original value and sets the game state back to the setup phase.
+ */
+void reset_game(void)
+{
+    current_game_state = SETUP;
+    game_turn = 1;
+    opponent_parts_hit = 0;
+    player_parts_hit = 0;
 }
